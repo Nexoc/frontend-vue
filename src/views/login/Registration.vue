@@ -56,20 +56,21 @@
             // get from index.js getters:
             ...mapGetters({
                 newUser: 'newUser',
+                authenticated: 'authenticated',
             }),
         },
 
         methods: {   
             insertUser() {
-                // To create a new User -> send to index.js actions insertUser()                
-  
+                // To create a new User -> send to index.js actions insertUser()     
                  this.$store.dispatch('insertUser', this.data)
                  .then(() => {
                     if (this.authenticated) {
-                        this.$router.replace({name: 'home'})
+                        this.$router.push('/') 
                     }
                 })
 
+                
             },
         },
     }

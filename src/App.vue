@@ -6,7 +6,7 @@ export default {
   components: { Sidebar },
   setup() {
     return { sidebarWidth }
-  }
+  },
 }
 </script>
 

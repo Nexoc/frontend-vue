@@ -55,7 +55,7 @@
                     this.$store.dispatch('signIn', this.data)
                     .then(() => {
                         if (this.authenticated) {
-                            this.$router.replace({name: 'home'})
+                            this.$router.push('/')                             
                         }
                     })
                 },

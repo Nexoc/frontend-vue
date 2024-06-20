@@ -1,7 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld />
+    <FoldersView />
     <router-view />
   </div>
 
@@ -9,12 +8,12 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import FoldersView from '@/components/FoldersView.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
+    FoldersView
   }
 }
 </script>

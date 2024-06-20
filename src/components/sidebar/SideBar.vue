@@ -7,27 +7,26 @@ export default {
   props: {},
   components: { SidebarLink },
   setup() {
-    return { collapsed, toggleSidebar, sidebarWidth }
+      return { collapsed, toggleSidebar, sidebarWidth }
   },
 
   methods: {  
-    logOut() {
-                //console.log('log Out the navigation')
-                this.$store.dispatch('logOut')
-                .then(() => {
-                    this.$router.replace({
-                        name: 'signin'
-                    })
+      logOut() {
+            this.$store.dispatch('logOut')
+            .then(() => {
+                this.$router.replace({
+                    name: 'signin'
                 })
-            },
-   },
+            })
+      },
+  },
 
   computed: {
-            ...mapGetters({
-                authenticated: "authenticated",
-                username: "username"
-            })
-        }
+      ...mapGetters({
+          authenticated: "authenticated",
+          username: "username",  
+      })
+    }
 }
 </script>
 
@@ -35,37 +34,34 @@ export default {
   <div class="sidebar" :style="{ width: sidebarWidth }">
 
     <template v-if="authenticated">
-      <h2>
-        <span v-if="collapsed">
-          <div>{{ username.charAt(0).toUpperCase() }}</div>
-          <div>{{ username.charAt(1).toUpperCase() }}</div>
-        </span>
-        <span v-else>{{ username }}</span>
-      </h2>
+        <h2>
+          <span v-if="collapsed">
+            <div>{{ username.charAt(0).toUpperCase() }}</div>
+            <div>{{ username.charAt(1).toUpperCase() }}</div>          
+          </span>
+          <span v-else>{{ username }}</span>
+        </h2>
 
-      <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-      <SidebarLink to="/dashboard" icon="fas fa-columns">toolbar-menu</SidebarLink>
-      <SidebarLink to="/about" icon="fas fa-chart-bar">Button</SidebarLink>
-      <SidebarLink to="/draw" icon="fas fa-users">draw</SidebarLink>
-      <SidebarLink to="/image" icon="fas fa-image">Log</SidebarLink>
-      <form @submit.prevent="logOut"><button>Logout</button></form>
+        <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
+        <SidebarLink to="/dashboard" icon="fas fa-columns">toolbar-menu</SidebarLink>
+        <SidebarLink to="/about" icon="fas fa-chart-bar">Button</SidebarLink>
+        <SidebarLink to="/draw" icon="fas fa-users">draw</SidebarLink>
+        <SidebarLink to="/image" icon="fas fa-image">Log</SidebarLink>
+        <form @submit.prevent="logOut"><button>Logout</button></form>
     </template>
 
     <template v-else>
+        <h2>
+          <span v-if="collapsed">
+            <div>K</div>
+            <div>A</div>
+          </span>
+          <span v-else>Please Auth</span>
+        </h2>
 
-      <h2>
-        <span v-if="collapsed">
-          <div>K</div>
-          <div>A</div>
-        </span>
-        <span v-else>Please Auth</span>
-      </h2>
-
-
-
-      <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-      <SidebarLink to="/signin" icon="fas fa-home">Sign in</SidebarLink>
-      <SidebarLink to="/registration" icon="fas fa-home">Registration</SidebarLink>             
+        <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
+        <SidebarLink to="/signin" icon="fas fa-home">Sign in</SidebarLink>
+        <SidebarLink to="/registration" icon="fas fa-home">Registration</SidebarLink>             
     </template>
 
     <span
