@@ -1,6 +1,12 @@
 <template>
-    <Bar />
-    <Draw />   
+  
+  <table>
+  <tr>
+    <th>  <Bar />   </th>
+    <th>  <Draw />  </th>
+  </tr>
+</table>   
+  
 </template>
     
   <script>

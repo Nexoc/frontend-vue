@@ -126,10 +126,20 @@
         }
       </v-style>
       <div class="experiment">
+        
         <div class="bars">
           <vue-file-toolbar-menu v-for="(content, index) in bars_content" :key="'bar-'+index" :content="content" />
         </div>
+
         <div ref="text" class="text" :contenteditable="edit_mode" spellcheck="false" v-html="initial_html"></div>
+
+      </div>
+      <div id="save" property="margin:50px">
+        <form @submit.prevent="textSave">
+
+          <button id='saveButton'>Save</button>          
+
+        </form>
       </div>
     </div>
   </template>
@@ -137,14 +147,15 @@
   <script>
   import VueFileToolbarMenu from '@/components/Bar/BarMain.vue' // set from 'vue-file-toolbar-menu' in your application
   import DemoCustomButton from './ToolbarButton.vue'
-  import DemoCustomMenuItem from './CustomMenuItem.vue'
+  import { mapGetters } from "vuex";
+  // import DemoCustomMenuItem from './CustomMenuItem.vue'
   
   export default {
     components: { VueFileToolbarMenu },
   
     data () {
       return {
-        initial_html: "Try me! Here is some <strong>contenteditable</strong> &lt;div&gt; for the demo.",
+        initial_html: "ToolBar.vue -> data() -> initial_html and &lt;div&gt; line 134 ",
         color: "rgb(74, 238, 164)",
         font: "Avenir",
         theme: "default",
@@ -185,6 +196,10 @@
                 { text: "Close", click () { if(confirm("Do you want to close the page?")) window.close(); } },
               ]
             },
+
+
+            /*
+            Maybe later I will grow project, but for now it is ok like it is
             {
               text: "Edit",
               menu: [
@@ -277,6 +292,8 @@
               ],
               menu_width: 220
             },
+            */
+
             { is: "spacer" },
             { icon: this.edit_mode ? "lock_open" : "lock", title: "Toggle edit mode", active: !this.edit_mode, click: () => { this.edit_mode = !this.edit_mode } }
           ],
@@ -313,7 +330,7 @@
             { icon: "format_indent_increase", title: "Increase indent", click: () => document.execCommand("indent") },
             { icon: "format_indent_decrease", title: "Decrease indent", click: () => document.execCommand("outdent") },
             { is: "separator" },
-            { is: DemoCustomButton, text: "Your component", click: () => alert("Your custom action!") },
+            { is: DemoCustomButton, text: "line 324", click: () => alert("My action!") },
             { is: "separator" },
             { html: "<b>H1</b>", title: "Header 1", click: () => document.execCommand('formatBlock', false, '<h1>') },
             { html: "<b>H2</b>", title: "Header 2", click: () => document.execCommand('formatBlock', false, '<h2>') },
@@ -338,17 +355,35 @@
         });
       },
       font_list: () => ["Arial", "Avenir", "Courier New", "Garamond", "Georgia", "Impact", "Helvetica", "Palatino", "Roboto", "Times New Roman", "Verdana"],
-      is_touch_device: () => ("ontouchstart" in window) || (window.navigator.msMaxTouchPoints > 0)
+      is_touch_device: () => ("ontouchstart" in window) || (window.navigator.msMaxTouchPoints > 0),
+
+      ...mapGetters({
+                    authenticated: 'auth/authenticated',
+                    username: 'auth/username',
+                    userId: 'auth/userId',
+                    folderId: 'folder/folderId',
+                    folderTitle: 'folder/title',
+            })
     },
   
     methods: {
       focus_text () {
-        this.$refs.text.focus();
-        document.execCommand('selectAll', false, null);
-        document.getSelection().collapseToEnd();
-      }
-    },
-  
+          this.$refs.text.focus();
+          document.execCommand('selectAll', false, null);
+          document.getSelection().collapseToEnd();
+      },
+      textSave(){
+        console.log("ToolBar.vue -> methods -> textSave -> line 376")  
+        
+        const newText = this.$refs.text.innerHTML  
+        console.log(newText)      
+        
+        this.$store.dispatch('content/getTextAsHTML', newText)
+            .then(() => {       
+              console.log("ToolBar.vue -> methods -> textSave -> line 383")
+            })                
+      },
+    },  
     mounted () {
       if(!this.is_touch_device) this.focus_text();
     }
@@ -446,5 +481,8 @@
     box-shadow: var(--demo-text-box-shadow);
     padding: 10px 15px;
     transition: .5s;
+  }
+  #save{
+    margin-left: 50px;
   }
   </style>

@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 /* eslint-disable */ 
 const state = {
         folderId: null, 
@@ -9,33 +10,36 @@ const state = {
         errorFolderId: null,
         folderStatus : null,
         requestStatus: null,
-        errorStatus: null
+        errorStatus: null,
+
 };
   
 const mutations = {
         findFolderById (state, folderData) {
-            //console.log('mutation get Folder')   
+            //console.log('folder.js -> mutation ->  findFolderById')
             state.folderStatus = null
             state.errorFolderId = null
         },
         folderStatus(state, folderID){
+            //console.log('folder.js -> mutation ->  folderStatus')
             state.folderStatus = "No folder with ID number: " + folderID
             state.errorFolderId = null
         },
         requestStatus(state, status) {
+            //console.log('folder.js -> mutation ->  requestStatus')
             state.requestStatus = status
         },
         errorFolderId(state, errorStatus, folderId){
-            //console.log('mutation error folder id')
+            //console.log('folder.js -> mutation ->  error folder id')
             state.errorFolderId = "Please use digits. Folder ID: " + folderId + " Request status: " + errorStatus
             state.folderStatus = null
         },
-        findAllFolders(state, folderData) {},
-
         updated(state, folderData) {
-            //
+            //console.log('folder.js -> mutation ->  update')
         },
-        deleteFolder(state, folderData){},
+        deleteFolder(state, folderData){
+            //console.log('folder.js -> mutation ->  delete')
+        },
 
         insertFolderData(state, folderData){
             console.log("-> folder.js func insert folder")
@@ -46,12 +50,25 @@ const mutations = {
             state.userId = folderData.userId
             state.contents = folderData.contents
             state.requestStatus = folderData.status
+            console.log("folder.js -> 55 requestStatus: " + folderData.status)
         }
 };
   
 const actions = {
         // get folder's data from DB per ID
-        async findAllFolders({ commit }, folder) {},
+        async findAllFolders({ dispatch }, userId) {
+            // console.log("folder.js -> actions -> findAllFolders") 
+
+            let http = "http://localhost:8001/api/v1/users/" + userId + "/folders/all"
+            let response = await axios.get(http)
+                .catch(error => {
+                        console.error('Error to show all folders: ', error);
+                                })
+            if (response.status == 200) {   
+                //console.log("folder.js -> actions -> findAllFolders 73")                
+                dispatch('auth/allFoldersData', response.data, { root: true })       
+            }
+        },
 
         async findFolderById ({ commit }, folder) {},
 
@@ -59,19 +76,19 @@ const actions = {
 
         async deleteFolder ({ commit }, folder) {},
 
-        async insertFolderData ({ commit }, title) {
+        async insertFolderData ({ commit }, data) {
             // Initialize your form data object with required data
             const folderDto = {
                 folderId: null,
-                title: title,
-                userId: 1
+                title: data.title,
+                userId: data.userId
             };            
             // Create a new FormData object to send
             const formData = new FormData();
             // key is 'folderDto' value is {}
             formData.append('folderDto', JSON.stringify(folderDto));
                 
-            let http = "http://localhost:8001/api/v1/users/1/folders/add-folder"
+            let http = "http://localhost:8001/api/v1/users/" + data.userId + "/folders/add-folder"
             let response = await axios.post(http, formData)
                 .catch(error => {
                         console.error('Error during inserting the new FOLDER: ', error);
@@ -92,19 +109,37 @@ const actions = {
 };
   
 const getters = {
-    getFolderId (state) {
-        if(state.folderId != null) {
-            return state.folderId
-        }               
-    },
-};
-  
+        folderId (state) {
+                return state.folderId                     
+        },
+        title(state) {
+            return state.title
+        },
+        userId(state) {
+            return state.userId
+        },
+        contents(state) {
+            return state.contents
+        },
+        errorFolderId(state) {
+            return state.errorFolderId
+        },
+        folderStatus(state) {
+            return state.folderStatus
+        },
+        requestStatus(state) {
+            return state.requestStatus
+        },
+        errorStatus(state) {
+            return state.errorStatus
+        },
+};  
 
 export default {
-    namespaced: true,
-    state,
-    mutations,
-    actions,
-    getters,
+        namespaced: true,
+        state,
+        mutations,
+        actions,
+        getters,
 };
   

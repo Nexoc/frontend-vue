@@ -88,9 +88,9 @@ export default {
 </script>
 
 <template>
-  <div id="app">
     <div class="flex-row">
       <div class="source">
+
         <p>Canvas:</p>
         <vue-drawing-canvas
           ref="VueCanvasDrawing"
@@ -120,6 +120,7 @@ export default {
           x-axis: <strong>{{ x }}</strong
           >, y-axis: <strong>{{ y }}</strong>
         </p>
+
         <div class="button-container">
           <button type="button" @click.prevent="disabled = !disabled">
             <svg
@@ -362,7 +363,6 @@ export default {
       </div>
       -->
     </div>
-  </div>
 </template>
 
 <style scoped>
@@ -372,6 +372,8 @@ body {
 
 }
 .flex-row {
+  margin-left: 100px;
+  margin-bottom: 50px;
   display: flex;
   flex-direction: row;
 }

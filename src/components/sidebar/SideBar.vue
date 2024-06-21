@@ -21,10 +21,13 @@ export default {
       },
   },
 
-  computed: {
-      ...mapGetters('auth', ['authenticated', 'username']), 
-
-    }
+  computed: {  
+      ...mapGetters({
+            authenticated: 'auth/authenticated',
+            username: 'auth/username',
+            userId: 'auth/userId',
+      })
+  },
 }
 </script>
 

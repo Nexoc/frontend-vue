@@ -6,7 +6,9 @@ const state = {
     isAuthenticated: false,
     signInError: null,
     username: null,
-    userId: null
+    userId: null,
+    userRole: null,
+    folders: {}
   };
   
 const mutations = {
@@ -29,11 +31,16 @@ const mutations = {
             state.access_token = userData.accessToken
             state.refresh_token = userData.refreshToken
             state.username = userData.username
-            state.userId = userData.userId            
+            state.userId = userData.userId 
+            //state.userRole = userData.userRole          
     },
     signInError(state) {
             //console.log('mutation sign up Error') 
             state.signInError = 'Username or passwort are wrong'
+    },
+    foldersData(state, foldersData) {
+            // console.log("auth.js -> mutations -> foldersData") 
+            state.folders = foldersData 
     }
 };
   
@@ -72,7 +79,6 @@ const actions = {
           }
     },
 
-
     logOut({ commit }) {
           commit('logOut')
           localStorage.removeItem('access_token')
@@ -110,15 +116,20 @@ const actions = {
                     "accessToken": response.data.accessToken,
                     "refreshToken": response.data.refreshToken,
                     "username": response.data.username,
-                    "userId": response.data.userId
+                    "userId": response.data.userId,
+                    //"userRole": response.data.userRole,
                 }
                 commit('insertUser', userData)
             }
 
-    }
+    },
+
+    async allFoldersData ({ commit }, foldersData) {
+            //console.log("auth.js -> actions -> allFoldersData") 
+            commit('foldersData', foldersData)
+    },
 };
 
-  
 const getters = {
     authenticated (state){
         let isTokenExist = !!state.access_token
@@ -147,9 +158,11 @@ const getters = {
     userId(state){
         return state.userId
     },
+    folders(state){
+        return state.folders
+    }
 };
   
-
 export default {
     namespaced: true,
     state,

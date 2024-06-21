@@ -1,24 +1,52 @@
 
 
 <template>
-  <div class="body">
+<div class="body">
     <div id="app" class="main">
-      <img src="@/assets/logo.png" alt="">
+        <img src="@/assets/logo.png" alt="">
 
-        <form @submit.prevent="insertFolder">
-        
-            <div id='insertFolder'>
+        <div id='insertFolder'>
+            <form @submit.prevent="insertFolder">
                 <input type="text" name="title" placeholder="your title of new folder" v-model="title" />
-            </div>
+                <button id='insertFolder'>insert new folder</button>
+            </form>
+        </div>
 
-            <button id='insertFolder'>insert new folder</button>
-        </form>
-
-        <template v-if="authenticated">
-            
+        <template v-if="requestStatus == 201">
+            <div id='folderInfo'>
+            {{ requestStatus }} <br>
+            {{ folderId }} <br>
+            {{ folderTitle }} <br>
+            </div>                    
         </template>
 
-      </div>
+        <div id='showFoldersButton'>
+            <form @submit.prevent="getAllFoldersByUser">
+                <button id='showFolders'>show all folders</button>
+            </form>
+        </div>
+
+        <template v-if="true">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>title</th>
+                        <th>owner</th>
+                        <th>content {}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="folder in folders" :key="folder.id">
+                        <td> Folder id {{folder.folderId}}</td>
+                        <td>Folder title {{folder.title}}</td>
+                        <td>Folder user owner {{folder.userId}}</td>
+                        <td>content {{folder.contents}}</td>
+                    </tr>
+                </tbody>
+            </table>
+         </template>      
+    </div>
   </div>
   </template>
   
@@ -26,8 +54,6 @@
   <script>
     /* eslint-disable */
     import { mapGetters } from "vuex";
-    import store from '@/store/index'
-    import folderStore from '@/store/folder'
   
     export default {
         namespaced: true,
@@ -40,15 +66,31 @@
         },
 
         computed: {  
-            ...mapGetters('auth', ['authenticated', 'username', "userId"]), 
+            ...mapGetters({
+                    authenticated: 'auth/authenticated',
+                    username: 'auth/username',
+                    userId: 'auth/userId',
+                    requestStatus: 'folder/requestStatus',
+                    folderId: 'folder/folderId',
+                    folderTitle: 'folder/title',
+                    folders: 'auth/folders',
+            })
         },
 
         methods: {   
                 getFolderById() {
                 //
-                },  
+                }, 
 
-                getAllFolderByUser() {
+                getAllFoldersByUser() {
+                    // send to folder.js actions findFolderById  
+                    console.log("FolderView.vue 67 method get All")                 
+                    this.$store.dispatch('folder/findAllFolders', this.userId)
+                    .then(() => {                        
+                        if (this.requestStatus == 200) {
+                            this.$router.push('/') 
+                        }
+                    })
                 //
                 },  
                 updateFolder() {
@@ -58,10 +100,12 @@
                 //
                 },  
                 insertFolder() {
+                    const data = {title: this.title, userId: this.userId}
                     // send to folder.js actions insertFolderdata                    
-                    this.$store.dispatch('folder/insertFolderData', this.title).then(() => {                        
-
-                    if (folderStore) {
+                    this.$store.dispatch('folder/insertFolderData', data)
+                    .then(() => {                        
+                    if (this.requestStatus == 201) {
+                        this.$store.dispatch('folder/findAllFolders', this.userId)
                         this.$router.push('/') 
                     }
                     })
@@ -73,8 +117,19 @@
 
 <style>
     #insertFolder{
+        margin-left: 50px;
+    }
+    #folderInfo{
+        margin-left: 50px;
+    }
+    #showFoldersButton{
         margin: 50px;
     }
+    .table{
+        margin: 50px;
+        border: 10px solid red;
+    }
+
 </style>
   
   
