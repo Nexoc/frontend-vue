@@ -12,7 +12,7 @@ export default {
 
   methods: {  
       logOut() {
-            this.$store.dispatch('logOut')
+            this.$store.dispatch('auth/logOut')
             .then(() => {
                 this.$router.replace({
                     name: 'signin'
@@ -22,10 +22,8 @@ export default {
   },
 
   computed: {
-      ...mapGetters({
-          authenticated: "authenticated",
-          username: "username",  
-      })
+      ...mapGetters('auth', ['authenticated', 'username']), 
+
     }
 }
 </script>

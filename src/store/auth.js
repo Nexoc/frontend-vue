@@ -1,9 +1,9 @@
 import axios from 'axios'
-
+/* eslint-disable */ 
 const state = {
     access_token: null, 
     refresh_token: null,
-    isAuthenticated: null,
+    isAuthenticated: false,
     signInError: null,
     username: null,
     userId: null
@@ -119,17 +119,18 @@ const actions = {
 };
 
   
-
 const getters = {
     authenticated (state){
-        return state.access_token
+        let isTokenExist = !!state.access_token
+        state.isAuthenticated = isTokenExist
+        return state.isAuthenticated
     }, 
     newUser (state) {
         let newUser = {
           "access_token": state.access_token, 
           "refresh_token": state.refresh_token,                      
         }
-        return newUser
+        return  state.newUser
     },
     access_token (state) {
         return state.access_token

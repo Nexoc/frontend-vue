@@ -90,7 +90,7 @@ axios.interceptors.response.use(
 
 const app = createApp(App);
 
-// enable devtools for the demo
+
 app.config.devtools = true;
 app.config.globalProperties.$axios = axios;
 

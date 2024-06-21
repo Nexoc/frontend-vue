@@ -39,13 +39,8 @@
                 }
         },
 
-        computed: {
-            ...mapGetters({
-                    authenticated: "authenticated",
-                    username: "username",   
-                    userId: "userId",
-                    //folderData: "folder/getData"                                                                                  
-            }),    
+        computed: {  
+            ...mapGetters('auth', ['authenticated', 'username', "userId"]), 
         },
 
         methods: {   
@@ -63,8 +58,8 @@
                 //
                 },  
                 insertFolder() {
-                    // send to folder.js actions insertFolderdata
-                    folderStore.dispatch('insertFolderData', this.title).then(() => {                        
+                    // send to folder.js actions insertFolderdata                    
+                    this.$store.dispatch('folder/insertFolderData', this.title).then(() => {                        
 
                     if (folderStore) {
                         this.$router.push('/') 
