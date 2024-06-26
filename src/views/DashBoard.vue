@@ -44,8 +44,6 @@ import { mapActions } from 'vuex';
                 "image": canvas
               }
   
-
-
               await this.insertContentData(dataAll);
           },
 

@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
-import About from '@/views/AboutView.vue'
+import About from '@/views/ShowFolders.vue'
 import DashBoard from '@/views/DashBoard.vue'
 import Draw from '@/views/DrawCanvas.vue'
 import SignIn from '@/views/login/SignIn.vue'

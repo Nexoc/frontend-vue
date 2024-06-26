@@ -16,7 +16,12 @@ const state = {
   
 const mutations = {
         findFolderById (state, folderData) {
-            //console.log('folder.js -> mutation ->  findFolderById')
+            //console.log('folder.js -> mutation ->  findFolderById: ' + folderData)
+            state.folderId = folderData.folderId
+            state.title = folderData.title
+            state.userId = folderData.userId
+            state.contents = folderData.contentIds
+            state.requestStatus = folderData.status
             state.folderStatus = null
             state.errorFolderId = null
         },
@@ -35,10 +40,10 @@ const mutations = {
             state.folderStatus = null
         },
         updated(state, folderData) {
-            //console.log('folder.js -> mutation ->  update')
+            console.log('folder.js -> mutation ->  update')
         },
         deleteFolder(state, folderData){
-            //console.log('folder.js -> mutation ->  delete')
+            console.log('folder.js -> mutation ->  delete')
         },
 
         insertFolderData(state, folderData){
@@ -63,11 +68,59 @@ const actions = {
             }
         },
 
-        async findFolderById ({ commit }, folder) {},
+        async findFolderById ({ commit }, data) {
+            console.log("folder.js -> action -> findFolderById -> folderId -> " + data.folderId)
+            // http://localhost:8001/api/v1/users/'+folder.userId+'/folders/'+folder.folderId
+            let http = "http://localhost:8001/api/v1/users/" + data.userId + "/folders/" + data.folderId
+            let response = await axios.get(http)
+            .catch(error => {
+                    console.error('Error to show all folders: ', error);
+                            })  
+            let responseData = response.data;
+            if (response.status == 200) {    
+                let folderData = {
+                        "folderId": responseData.folderId,
+                        "title": responseData.title,
+                        "userId": responseData.userId,
+                        "contents": responseData.contentIds,
+                        "status": response.status
+                    }       
+                commit('findFolderById', folderData)     
+            }
+        },
 
-        async updateFolder ({ commit }, folder) {},
+        async updateFolder ({ commit }, data) {
+            console.log("folder.js -> action -> update folder -> folderId -> " + data.folderId)
+            let http = "http://localhost:8001/api/v1/users/" + data.userId + "/folders/update/" + data.folderId
+                     // http://localhost:8001/api/v1/users/             1     /folders/update/    2
+            const folderDto = {
+                folderId: data.folderId,
+                title: data.title,
+                userId: data.userId
+            };            
+            // Create a new FormData object to send
+            const formData = new FormData();
+            // key is 'folderDto' value is {}
+            formData.append('folderDto', JSON.stringify(folderDto));
+            let response = await axios.put(http, folderDto)
+            .catch(error => {
+                    console.error('Error to update folder with id: ' + data.folderId, error);
+                            })  
+            console.log(response.status)           
+            let responseData = response.data;
 
-        async deleteFolder ({ commit }, folder) {},
+        },
+
+        async deleteFolder ({ commit }, data) {            
+            console.log("folder.js -> action -> delete folder -> folderId -> " + data.folderId)
+            let http = "http://localhost:8001/api/v1/users/" + data.userId + "/folders/delete/" + data.folderId
+            let response = await axios.delete(http)
+            .catch(error => {
+                    console.error('Error to delete folder: ', error);
+                            }) 
+            console.log(response.status)    
+            let responseData = response.data;
+        },
 
         async insertFolderData ({ commit }, data) {
             // Initialize your form data object with required data
