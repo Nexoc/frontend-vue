@@ -100,4 +100,5 @@ app.component("v-style", {
 });
 
 
+
 app.use(store).use(router).use(Vuex).mount('#app')

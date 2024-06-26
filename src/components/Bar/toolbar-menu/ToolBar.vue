@@ -7,6 +7,18 @@
           </svg>
           <a href="https://github.com/nexoc">view on github</a>
       </div>
+      <div class="title">{{ username }}</div>
+
+      <div id='title'>
+            <input 
+            type="text" 
+            name="title" 
+            placeholder="Title"
+            v-model="title"       
+            />
+            <div>Folder: {{ folderTitle }} / Content: {{ title }}</div>
+      </div>
+
       <div class="styles">
         <select v-model="theme">
           <option value="default">Default style (Marat)</option>
@@ -162,7 +174,8 @@
         edit_mode: true,
         check1: false,
         check2: false,
-        check3: true
+        check3: true,
+        title: "",
       }
     },
   
@@ -373,15 +386,17 @@
           document.getSelection().collapseToEnd();
       },
       textSave(){
-        console.log("ToolBar.vue -> methods -> textSave -> line 376")  
+        //console.log("ToolBar.vue -> methods -> textSave -> line 389")     
+        const newText = this.$refs.text.innerHTML          
+        const data = {text: newText, title: this.title, folderId: this.folderId}  
+        // <div>Folder: {{ folderTitle }} / Content: {{ title }}</div>   
         
-        const newText = this.$refs.text.innerHTML  
-        console.log(newText)      
-        
-        this.$store.dispatch('content/getTextAsHTML', newText)
+        return data;
+        /*this.$store.dispatch('content/getTextAsHTML', data)
             .then(() => {       
               console.log("ToolBar.vue -> methods -> textSave -> line 383")
-            })                
+            })     
+              */           
       },
     },  
     mounted () {

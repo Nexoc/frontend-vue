@@ -4,7 +4,7 @@ import VueDrawingCanvas from "vue-drawing-canvas";
 export default {
   name: "ServeDev",
   components: {
-    VueDrawingCanvas,
+    VueDrawingCanvas, 
   },
   data() {
     return {
@@ -38,6 +38,7 @@ export default {
       additionalImages: [],
     };
   },
+
   mounted() {
     if ("vue-drawing-canvas" in window.localStorage) {
       this.initialImage = JSON.parse(
@@ -45,6 +46,7 @@ export default {
       );
     }
   },
+
   methods: {
     async setImage(event) {
       let URL = window.URL;
@@ -83,6 +85,12 @@ export default {
       window.localStorage.removeItem("vue-drawing-canvas");
       alert("Strokes cleared from local storage");
     },
+
+    saveImage() {
+      //console.log("DrawCanvas.vue -> saveImage -> 90")
+      const image = this.image
+      return image;
+    }
   },
 };
 </script>
@@ -355,7 +363,16 @@ export default {
             <input type="file" @change="setWatermarkImage($event)" />
           </div>
         </div>
+
+        <div id="save" property="margin:50px">
+        <form @submit.prevent="saveImage">
+
+          <button id='saveButton'>Save</button>          
+
+        </form>
       </div>
+      </div>
+
       <!--...
       <div class="output">
         <p>Output:</p>

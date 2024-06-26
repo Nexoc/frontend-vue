@@ -42,30 +42,23 @@ const mutations = {
         },
 
         insertFolderData(state, folderData){
-            console.log("-> folder.js func insert folder")
-            console.log(folderData)
-
             state.folderId = folderData.folderId
             state.title = folderData.title       
             state.userId = folderData.userId
             state.contents = folderData.contents
             state.requestStatus = folderData.status
-            console.log("folder.js -> 55 requestStatus: " + folderData.status)
         }
 };
   
 const actions = {
         // get folder's data from DB per ID
         async findAllFolders({ dispatch }, userId) {
-            // console.log("folder.js -> actions -> findAllFolders") 
-
             let http = "http://localhost:8001/api/v1/users/" + userId + "/folders/all"
             let response = await axios.get(http)
                 .catch(error => {
                         console.error('Error to show all folders: ', error);
-                                })
-            if (response.status == 200) {   
-                //console.log("folder.js -> actions -> findAllFolders 73")                
+                                })            
+            if (response.status == 200) {                 
                 dispatch('auth/allFoldersData', response.data, { root: true })       
             }
         },
