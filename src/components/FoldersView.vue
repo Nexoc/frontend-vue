@@ -25,6 +25,7 @@
                     folderId: 'folder/folderId',
                     folderTitle: 'folder/title',
                     contents: "folder/contents",
+                    toBeUpdated: 'content/toBeUpdated',                     
             })
         },
 
@@ -69,9 +70,9 @@
                     console.log("this.folderId = " + this.folderId + " and folderIdToBeUpdated = " + folderIdToBeUpdated 
                     + "showUpdateField -> " + this.showUpdateField)
                 },
-                getFolderById(folderId) {
+                createContent(folderId) {
                     // http://localhost:8001/api/v1/users/'+folder.userId+'/folders/'+folder.folderId
-                    console.log("FolderView.vue 85 method get f by id -> " + folderId)   
+                    console.log("FolderView.vue 85 method createContent -> folder ID -> " + folderId)   
                     var data = {
                         "folderId": folderId,
                         "userId": this.userId
@@ -80,7 +81,11 @@
                     .then(() => {  
                         this.showContentsField = false                     
                         if (this.requestStatus == 200) {
-                            this.showUpdateField = false
+                            this.showUpdateField = false  
+                            this.$store.dispatch('content/toBeUpdated', false)
+
+                            console.log("FolderView.vue 90 method createContent -> file -> " + this.file + " fileUrl: " + this.fileUrl)   
+                            
                             this.$router.push('/dashboard') 
                         }
                     })
@@ -162,7 +167,7 @@
                     })
                 },  
                 showContent(contentId) {
-                    console.log("Folder vue -> delete content ->content id " + contentId)
+                    console.log("Folder vue -> show content ->content id " + contentId)
                     this.$store.dispatch('content/findContentById', contentId)  
                     this.$router.push('/content/') 
                 }         
@@ -211,8 +216,8 @@
                     <tbody>
                         <tr v-for="folder in folders" :key="folder.id">
                             <td>
-                                <form @submit.prevent="getFolderById(folder.folderId)">
-                                    <button id='showFolder'>{{ folder.title }} and id {{ folder.folderId }}</button>
+                                <form @submit.prevent="createContent(folder.folderId)">
+                                    <button id='createContent'>{{ folder.title }} and id {{ folder.folderId }}</button>
                                 </form>
                             </td>
                             <td>

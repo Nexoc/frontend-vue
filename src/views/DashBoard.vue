@@ -30,21 +30,29 @@ import { mapActions } from 'vuex';
       components: { Bar, Draw },
 
       methods: {
-          ...mapActions('content', ['insertContentData']),
+          ...mapActions('content', ['insertContentData', 'updateContentData']),
           
           async handleInsertContentData() {
               // console.log("dashBoard.vue -> methods -> handleInsertContentData 36")
               const data = this.$refs.toolbar.textSave();
               const canvas = this.$refs.draw.saveImage(); 
-              
-              const dataAll = {
+
+              const dataAll = {                                            
                 "text": data.text,
                 "title": data.title,
                 "folderId": data.folderId,
-                "image": canvas
+                "image": canvas.image,
+                "contentId": canvas.contentId,  
+              }
+
+              if(canvas.toBeUpdated) {
+                  console.log("if(data.toBeUpdated) ->  data.contentId;" + dataAll.contentId)
+                  await this.updateContentData(dataAll);
+              } else {
+                  await this.insertContentData(dataAll);
               }
   
-              await this.insertContentData(dataAll);
+              
           },
 
       },

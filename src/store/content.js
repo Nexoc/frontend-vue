@@ -2,12 +2,13 @@ import axios from 'axios'
 /* eslint-disable */ 
 const state = {
         contentId: null, 
-        contentAsHTML: null,
+        contentAsHTML: "content text ",
         title: null,  
         publishedOn: null,  
         file: null,    
         fileUrl: null,        
         folderId: null,  
+        toBeUpdated: false,        
         
         errorContentId: null,
         contentStatus : null,
@@ -55,6 +56,13 @@ const mutations = {
             state.fileUrl = contentData.filePath
             state.folderId = contentData.folderId 
             state.requestStatus = contentData.status
+        },
+
+        toBeUpdated(state, bool) {
+            state.toBeUpdated = bool
+        },
+        changeHtml(state, text) {
+            state.contentAsHTM = text
         }
 };
   
@@ -83,7 +91,44 @@ const actions = {
             }
         },
 
-        async updateContent ({ commit }, content) {},
+        async updateContentData ({ commit }, data) {
+            console.log("content.js -> actions -> updateContentData -> line 87 data-> " + data)
+            const base64Image = data.image; 
+            const mimeType = base64Image.match(/([^;]+);/)[1];
+            const imageBlob = base64ToBlob(base64Image, mimeType);
+
+            const contentDto = {
+                contentId: data.contentId,
+                title: data.title,                
+                content: data.text,
+                folderId: data.folderId
+            };                                  
+            // Create a new FormData object to send
+            const formData = new FormData();            
+            formData.append('file', imageBlob, 'image.png');
+            formData.append('contentDto', JSON.stringify(contentDto));          
+            let http = "http://localhost:8001/api/v1/contents/update/" + data.contentId
+            let response = await axios.put(http, formData)
+                .catch(error => {
+                        console.error('Error during inserting the new Content: ', error);
+                                })
+            let responseData = response.data;
+            console.log("content.js -> updateContentData -> 108 response.status: " + response.status)
+            if (response.status == 200) {    
+                let contentData = {
+                        "contentId": responseData.contentId,
+                        "title": responseData.title,
+                        "content": responseData.content,
+                        "publishedOn": responseData.publishedOn,
+                        "file": responseData.file,
+                        "filePath": responseData.filePath,
+                        "folderId": responseData.folderId,
+                        "status": response.status,                        
+                    }                     
+                commit('insertContentData', contentData)     
+            }
+
+        },
 
         async deleteContent ({ commit }, contentId) {
             console.log(" content.js -> actions -> delete content" + contentId)
@@ -137,6 +182,12 @@ const actions = {
                 commit('insertContentData', contentData)     
             }
         },
+        toBeUpdated({ commit }, bool){
+            commit('toBeUpdated', bool)  
+        },
+        changeHtml({ commit }, text){
+            commit('changeHtml', text)  
+        }
 };
   
 const getters = {
@@ -172,6 +223,9 @@ const getters = {
         },
         errorStatus(state) {
             return state.errorStatus
+        },
+        toBeUpdated(state){
+            return state.toBeUpdated
         },
 };
   

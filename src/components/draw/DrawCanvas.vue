@@ -1,4 +1,5 @@
 <script>
+// import content from "@/store/content";
 import VueDrawingCanvas from "vue-drawing-canvas";
 import { mapGetters } from 'vuex';
 
@@ -41,8 +42,10 @@ export default {
   },
   computed: {  
     ...mapGetters({
+            contentId: 'content/contentId',
             file: 'content/file',
-            fileUrl: 'content/fileUrl',         
+            fileUrl: 'content/fileUrl',  
+            toBeUpdated: 'content/toBeUpdated'    
         }),
         },
 
@@ -52,36 +55,31 @@ export default {
         window.localStorage.getItem("vue-drawing-canvas")
       );
     }
-    if(this.fileUrl != null) {
+    if(this.toBeUpdated) {
       console.log("Is not NULL -> " + this.fileUrl)
         this.setImageFromUrl(this.fileUrl)
     } 
   },
 
   methods: {
-    async setImageFromUrl(fileUrl){
-      console.log("methods -> setImageFromUrl-> Is not NULL -> " + fileUrl)
-      if (this.imageUrl) {
+    async setImageFromUrl(fileUrl){      
+      if (fileUrl) {
         try {
-          console.log("try ")
           // Fetch the image from the URL to ensure it's valid and then use it
-          const response = await fetch(this.imageUrl);
-          console.log("response -> " + response)
+          const response = await fetch(fileUrl);
           if (!response.ok) {
             throw new Error('Image not found or network error');
           }
           const blob = await response.blob();
           let URL = window.URL;
           this.backgroundImage = URL.createObjectURL(blob);
-          await this.$refs.VueCanvasDrawing.redraw();
+          await this.$refs.VueCanvasDrawing.redraw();       
+          this.$store.dispatch('content/toBeUpdated', true)
+          console.log("async setImageFromUrl -> toBeUpdated -> " + this.toBeUpdated)
         } catch (error) {
           console.error('Failed to load image from URL', error);
-        } finally {
-          console.log("finally ->>>>>")
         }
       }
-
-      // await this.$refs.VueCanvasDrawing.redraw();
     },
     async setImage(event) {
       let URL = window.URL;
@@ -122,9 +120,15 @@ export default {
     },
 
     saveImage() {
-      //console.log("DrawCanvas.vue -> saveImage -> 90")
-      const image = this.image
-      return image;
+      console.log("DrawCanvas.vue -> saveImage -> 123 -> content ID: " + this.contentId)
+      const data = {
+        "contentId": this.contentId,
+        "image": this.image,
+        "toBeUpdated": this.toBeUpdated,
+      }
+      this.$store.dispatch('content/toBeUpdated', false)
+      this.contentId = null
+      return data;
     }
   },
 };

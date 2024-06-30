@@ -160,7 +160,7 @@
   
     data () {
       return {
-        initial_html: "ToolBar.vue -> data() -> initial_html and &lt;div&gt; line 134 ",
+        initial_html: this.contentAsHTML,
         color: "rgb(74, 238, 164)",
         font: "Avenir",
         theme: "default",
@@ -368,6 +368,7 @@
                     userId: 'auth/userId',
                     folderId: 'folder/folderId',
                     folderTitle: 'folder/title',
+                    contentAsHTML: "content/contentAsHTML",
             })
     },
   
