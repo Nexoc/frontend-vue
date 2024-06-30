@@ -146,13 +146,6 @@
         <div ref="text" class="text" :contenteditable="edit_mode" spellcheck="false" v-html="initial_html"></div>
 
       </div>
-      <div id="save" property="margin:50px">
-        <form @submit.prevent="textSave">
-
-          <button id='saveButton'>Save</button>          
-
-        </form>
-      </div>
     </div>
   </template>
   
@@ -179,8 +172,7 @@
       }
     },
   
-    computed: {
-  
+    computed: {  
       // Read the API documentation about the available menu content options
   
       bars_content () {
@@ -389,14 +381,8 @@
         //console.log("ToolBar.vue -> methods -> textSave -> line 389")     
         const newText = this.$refs.text.innerHTML          
         const data = {text: newText, title: this.title, folderId: this.folderId}  
-        // <div>Folder: {{ folderTitle }} / Content: {{ title }}</div>   
-        
         return data;
-        /*this.$store.dispatch('content/getTextAsHTML', data)
-            .then(() => {       
-              console.log("ToolBar.vue -> methods -> textSave -> line 383")
-            })     
-              */           
+         
       },
     },  
     mounted () {

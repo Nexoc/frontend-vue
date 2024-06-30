@@ -39,7 +39,7 @@ const mutations = {
             state.signInError = 'Username or passwort are wrong'
     },
     foldersData(state, foldersData) {
-            //console.log("auth.js -> mutations -> foldersData") 
+            // console.log("auth.js -> mutations -> foldersData") 
             // todo 
             state.folders = foldersData 
     }
@@ -126,7 +126,7 @@ const actions = {
     },
 
     async allFoldersData ({ commit }, foldersData) {
-            //console.log("auth.js -> actions -> allFoldersData") 
+            // console.log("auth.js -> actions -> allFoldersData") 
             commit('foldersData', foldersData)
     },
 };

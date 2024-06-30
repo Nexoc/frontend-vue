@@ -5,6 +5,7 @@ import DashBoard from '@/views/DashBoard.vue'
 import Draw from '@/views/DrawCanvas.vue'
 import SignIn from '@/views/login/SignIn.vue'
 import Registration from '@/views/login/Registration.vue'
+import Content from '@/views/ContentView.vue'
 
 
 
@@ -26,20 +27,12 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: DashBoard
-    // component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: DashBoard  
   },
   {
     path: '/draw',
     name: 'draw',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: Draw
-    // component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
     {
     path: '/signin',
@@ -51,6 +44,12 @@ const routes = [
     name: 'registration',
     component: Registration
   },
+  {
+    path: '/content',
+    name: 'content',
+    component: Content
+  },
+  
 ]
 
 const router = createRouter({

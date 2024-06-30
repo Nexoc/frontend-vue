@@ -33,6 +33,14 @@ export default {
 
 <template>
   <div class="sidebar" :style="{ width: sidebarWidth }">
+    <span
+      class="collapse-icon"
+      :class="{ 'rotate-180': collapsed }"
+      @click="toggleSidebar"
+    >
+      <i class="fas fa-angle-double-left" />
+    </span>
+    <br>
 
     <template v-if="authenticated">
         <h2>
@@ -54,7 +62,7 @@ export default {
     <template v-else>
         <h2>
           <span v-if="collapsed">
-            <div>K</div>
+            <div>N</div>
             <div>A</div>
           </span>
           <span v-else>Please Auth</span>
@@ -64,14 +72,6 @@ export default {
         <SidebarLink to="/signin" icon="fas fa-home">Sign in</SidebarLink>
         <SidebarLink to="/registration" icon="fas fa-home">Registration</SidebarLink>             
     </template>
-
-    <span
-      class="collapse-icon"
-      :class="{ 'rotate-180': collapsed }"
-      @click="toggleSidebar"
-    >
-      <i class="fas fa-angle-double-left" />
-    </span>
   </div>
 </template>
 
@@ -108,11 +108,9 @@ export default {
 
 .collapse-icon {
   position: absolute;
-  bottom: 0;
+  top: 0;
   padding: 0.75em;
-
   color: rgba(0, 0, 0, 0.7);
-
   transition: 0.2s linear;
 }
 

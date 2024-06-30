@@ -4,9 +4,10 @@ const state = {
         contentId: null, 
         contentAsHTML: null,
         title: null,  
+        publishedOn: null,  
         file: null,    
         fileUrl: null,        
-        folderId: null,        
+        folderId: null,  
         
         errorContentId: null,
         contentStatus : null,
@@ -15,74 +16,90 @@ const state = {
 };
   
 const mutations = {
-        findContentById (state, contentData) {
-            //console.log('content.js -> mutation ->  findContentById')
-            state.contentStatus = null
-            state.errorContentId = null
-        },
         contentStatus(state, contentId){
-            //console.log('content.js -> mutation ->  contentStatus')
+            // console.log('content.js -> mutation ->  contentStatus')
             state.contentStatus = "No content with ID number: " + contentId
             state.errorContentId = null
         },
         requestStatus(state, status) {
-            //console.log('content.js -> mutation ->  requestStatus')
+            // console.log('content.js -> mutation ->  requestStatus')
             state.requestStatus = status
         },
         errorContentId(state, errorStatus, contentId){
-            //console.log('folder.js -> mutation ->  error folder id')
+            // console.log('folder.js -> mutation ->  error folder id')
             state.errorContentId = "Please use digits. content ID: " + contentId + " Request status: " + errorStatus
             state.contentStatus = null
         },
-        findAllContents(state, contentData) {
-            // console.log('content.js -> mutation ->  find')
-        },
-
         updated(state, contentData) {
-            //console.log('content.js -> mutation ->  update')
+            // console.log('content.js -> mutation ->  update')
         },
-        deleteContent(state, contentData){
-            //console.log('content.js -> mutation ->  delete')
+        deleteContent(state, status){
+            console.log('content.js -> mutation ->  delete')
+            state.contentId = null
+            state.title = null
+            state.contentAsHTML = null
+            state.publishedOn = null
+            state.file = null
+            state.fileUrl = null
+            state.folderId = null
+            state.requestStatus = status
         },
 
         insertContentData(state, contentData){
-            //console.log("-> content.js mutation insert content")
-            //console.log(contentData)
+            console.log("-> content.js mutation insert content" + contentData.file)
             state.contentId = contentData.contentId
-            state.contentAsHTML = contentData.content
             state.title = contentData.title
+            state.contentAsHTML = contentData.content
+            state.publishedOn = contentData.publishedOn
             state.file = contentData.file
-            state.fileUrl = contentData.fileUrl
+            state.fileUrl = contentData.filePath
             state.folderId = contentData.folderId 
+            state.requestStatus = contentData.status
         }
 };
   
 const actions = {
-        // get content's data from DB per ID
-        async findAllContents({ commit }, content) {},
-
-        async findContentById ({ commit }, content) {},
+        async findContentById ({ commit }, contentId) {
+            console.log(" content.js -> actions -> findContentById" + contentId)
+            let http = "http://localhost:8001/api/v1/contents/" + contentId
+            let response = await axios.get(http)
+            .catch(error => {
+                console.error('Error during geting the content with id: ' + contentId, error);
+                        })
+            let responseData = response.data;
+            console.log(" content.js -> actions -> find content by id 71 -> response status: " + response.status)
+            if (response.status == 200) {    
+                let contentData = {
+                        "contentId": responseData.contentId,
+                        "title": responseData.title,
+                        "content": responseData.content,
+                        "publishedOn": responseData.publishedOn,
+                        "file": responseData.file,
+                        "filePath": responseData.filePath,
+                        "folderId": responseData.folderId,
+                        "status": response.status,                        
+                    }                     
+                commit('insertContentData', contentData)     
+            }
+        },
 
         async updateContent ({ commit }, content) {},
 
-        async deleteContent ({ commit }, content) {},
+        async deleteContent ({ commit }, contentId) {
+            console.log(" content.js -> actions -> delete content" + contentId)
+            let http = "http://localhost:8001/api/v1/contents/delete/" + contentId
 
-        async getTextAsHTML ({ commit }, text) {
-            //console.log("content.js -> actions -> saveTextAsHTML -> line 65")
-            //console.log(text)
+            let response = await axios.delete(http)
+            .catch(error => {
+                    console.error('Error during deleting the content with id: ' + contentId, error);
+                            })
+            let responseData = response.data;
+            console.log(" content.js -> actions -> delete 71 -> response status: " + response.status)
+            commit('deleteContent', response.status)  
         },
 
         async insertContentData ({ commit }, data) {
-            //console.log("content.js -> actions -> insertContentData -> line 81")
-            // Initialize your form data object with required data
-
-            // let canvasUrl = canvas.toDataURL("image/png", 0.5);
- 
-            //console.log("insertContentData TEXT -> " + data.text)
-            //console.log("title -> " + data.title)
-            //console.log("folder id -> " + data.folderId)
-            //console.log("image " + data.image)
-
+            console.log("content.js -> actions -> insertContentData -> line 91 data-> " + data)
             // base64 image data
             const base64Image = data.image; 
             // Convert base64 to Blob
@@ -94,29 +111,18 @@ const actions = {
                 title: data.title,                
                 content: data.text,
                 folderId: data.folderId
-            };            
-
-            //console.log("content.js -> actions -> insertContentData -> line 96")
-            // let canvasUrl = data.image.toDataURL("image/png", 1);
-            
+            };                                  
             // Create a new FormData object to send
-            const formData = new FormData();
-            // key is 'contentDto' value is {}
+            const formData = new FormData();            
             formData.append('file', imageBlob, 'image.png');
-            formData.append('contentDto', JSON.stringify(contentDto));
-            
-            //console.log("content.js -> actions -> insertContentData -> line 102")
-                // api/v1/users/{userId}/folders/{folderId}/contents
+            formData.append('contentDto', JSON.stringify(contentDto));          
             let http = "http://localhost:8001/api/v1/contents/add-content"
-            //let http = "http://localhost:8001/api/v1/users/" + 1 + "/folders/" + 1 + "/contents/add-content"
             let response = await axios.post(http, formData)
                 .catch(error => {
                         console.error('Error during inserting the new Content: ', error);
                                 })
-
             let responseData = response.data;
-            
-            //console.log("rmyarr 115" + responseData.ArrayBuffer)
+            // console.log("content.js -> insertContentData -> 117 response.status: " + response.status)
             if (response.status == 201) {    
                 let contentData = {
                         "contentId": responseData.contentId,
@@ -124,10 +130,10 @@ const actions = {
                         "content": responseData.content,
                         "publishedOn": responseData.publishedOn,
                         "file": responseData.file,
-                        "fileUrl": responseData.filePath,
+                        "filePath": responseData.filePath,
                         "folderId": responseData.folderId,
                         "status": response.status,                        
-                    }       
+                    }                     
                 commit('insertContentData', contentData)     
             }
         },
@@ -143,11 +149,17 @@ const getters = {
         contentAsHTML(state) {
             return state.contentAsHTML
         },
+        publishedOn(state){
+            return state.publishedOn
+        },
         file(state) {
             return state.file
         },
         fileUrl(state) {
             return state.fileUrl
+        },
+        folderId(state) {
+            return state.folderId
         },
         errorContentId(state) {
             return state.errorContentId

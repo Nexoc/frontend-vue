@@ -12,9 +12,6 @@ import '@fortawesome/fontawesome-free/js/all'
 axios.defaults.baseURL = 'http://localhost:8001'
 
 // axios.defaults.baseURL = 'http://localhost:8001/api/v1'
-// TODO 
-// store.dispatch("token_storage")
-
 
 // REFRESH TOKEN
 async function refreshToken() {

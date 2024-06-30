@@ -1,5 +1,6 @@
 <script>
 import VueDrawingCanvas from "vue-drawing-canvas";
+import { mapGetters } from 'vuex';
 
 export default {
   name: "ServeDev",
@@ -38,6 +39,12 @@ export default {
       additionalImages: [],
     };
   },
+  computed: {  
+    ...mapGetters({
+            file: 'content/file',
+            fileUrl: 'content/fileUrl',         
+        }),
+        },
 
   mounted() {
     if ("vue-drawing-canvas" in window.localStorage) {
@@ -45,9 +52,37 @@ export default {
         window.localStorage.getItem("vue-drawing-canvas")
       );
     }
+    if(this.fileUrl != null) {
+      console.log("Is not NULL -> " + this.fileUrl)
+        this.setImageFromUrl(this.fileUrl)
+    } 
   },
 
   methods: {
+    async setImageFromUrl(fileUrl){
+      console.log("methods -> setImageFromUrl-> Is not NULL -> " + fileUrl)
+      if (this.imageUrl) {
+        try {
+          console.log("try ")
+          // Fetch the image from the URL to ensure it's valid and then use it
+          const response = await fetch(this.imageUrl);
+          console.log("response -> " + response)
+          if (!response.ok) {
+            throw new Error('Image not found or network error');
+          }
+          const blob = await response.blob();
+          let URL = window.URL;
+          this.backgroundImage = URL.createObjectURL(blob);
+          await this.$refs.VueCanvasDrawing.redraw();
+        } catch (error) {
+          console.error('Failed to load image from URL', error);
+        } finally {
+          console.log("finally ->>>>>")
+        }
+      }
+
+      // await this.$refs.VueCanvasDrawing.redraw();
+    },
     async setImage(event) {
       let URL = window.URL;
       this.backgroundImage = URL.createObjectURL(event.target.files[0]);
@@ -363,16 +398,7 @@ export default {
             <input type="file" @change="setWatermarkImage($event)" />
           </div>
         </div>
-
-        <div id="save" property="margin:50px">
-        <form @submit.prevent="saveImage">
-
-          <button id='saveButton'>Save</button>          
-
-        </form>
       </div>
-      </div>
-
       <!--...
       <div class="output">
         <p>Output:</p>
