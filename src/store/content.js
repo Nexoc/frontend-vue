@@ -3,7 +3,7 @@ import axios from 'axios'
 const state = {
         contentId: null, 
         contentAsHTML: "content text ",
-        title: null,  
+        title: "content title",  
         publishedOn: null,  
         file: null,    
         fileUrl: null,        
@@ -63,7 +63,23 @@ const mutations = {
         },
         changeHtml(state, text) {
             state.contentAsHTM = text
-        }
+        },
+        initNew(state){
+            state.contentId = null, 
+            state.contentAsHTML = "content text "
+            state.title = "content title" 
+            state.publishedOn = null
+            state.file = null  
+            state.fileUrl = null      
+            state.folderId = null 
+            state.toBeUpdated = false      
+            
+            state.errorContentId = null
+            state.contentStatus = null
+            state.requestStatus = null
+            state.errorStatus = null
+        },
+
 };
   
 const actions = {
@@ -187,7 +203,10 @@ const actions = {
         },
         changeHtml({ commit }, text){
             commit('changeHtml', text)  
-        }
+        },
+        initNew({ commit }){
+            commit('initNew')  
+        },
 };
   
 const getters = {

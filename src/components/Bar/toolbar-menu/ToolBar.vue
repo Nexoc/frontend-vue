@@ -168,7 +168,7 @@
         check1: false,
         check2: false,
         check3: true,
-        title: "",
+        title: this.titleSaved,
       }
     },
   
@@ -368,7 +368,10 @@
                     userId: 'auth/userId',
                     folderId: 'folder/folderId',
                     folderTitle: 'folder/title',
-                    contentAsHTML: "content/contentAsHTML",
+                    contentAsHTML: 'content/contentAsHTML',
+                    toBeUpdated: 'content/toBeUpdated', 
+                    titleSaved: 'content/title', 
+                     
             })
     },
   
@@ -379,15 +382,26 @@
           document.getSelection().collapseToEnd();
       },
       textSave(){
-        //console.log("ToolBar.vue -> methods -> textSave -> line 389")     
+        console.log("ToolBar.vue -> methods -> textSave -> line 382: " + this.contentAsHTML)     
         const newText = this.$refs.text.innerHTML          
-        const data = {text: newText, title: this.title, folderId: this.folderId}  
+        const data = {
+          text: newText, 
+          title: this.title, 
+          folderId: this.folderId}  
         return data;
          
       },
     },  
     mounted () {
       if(!this.is_touch_device) this.focus_text();
+      /* eslint-disable */
+      if(!this.toBeUpdated){
+        this.$store.dispatch('content/initNew')
+      }
+      if(true) {
+        this.initial_html = this.contentAsHTML
+        this.title = this.titleSaved
+      };
     }
   }
   </script>

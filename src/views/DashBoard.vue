@@ -6,7 +6,7 @@
     <th>  <Draw ref="draw"/>  </th>
   </tr>
 
-    <div id="save" property="margin:50px">
+    <div id="save">
         <form @submit.prevent="handleInsertContentData">
 
           <button id='saveButton'>Save</button>          
@@ -60,6 +60,9 @@ import { mapActions } from 'vuex';
 </script>
 
 <style>
+    #save{
+        margin-left: 100px;
+    }
+
 
 </style>
-
