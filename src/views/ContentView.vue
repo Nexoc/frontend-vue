@@ -54,7 +54,7 @@
         updateContent() {
           this.$store.dispatch('content/toBeUpdated', true)
           console.log("ContentView -> updateContent -> fileUrl -> " + this.fileUrl + " -> this.toBeUpdated is: " + this.toBeUpdated) 
-          this.$router.push('/dashboard') 
+          this.$router.push('/create') 
         }
 
     },

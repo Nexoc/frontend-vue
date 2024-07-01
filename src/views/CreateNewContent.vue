@@ -21,7 +21,7 @@
 <script>
 import Bar from '@/components/Bar/toolbar-menu/ToolBar.vue'
 import Draw from '@/components/draw/DrawCanvas.vue'
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
     export default {
       setup() {
@@ -29,11 +29,19 @@ import { mapActions } from 'vuex';
       },
       components: { Bar, Draw },
 
-      methods: {
-          ...mapActions('content', ['insertContentData', 'updateContentData']),
+      computed: {  
+            ...mapGetters({
+                    requestStatus: 'folder/requestStatus', 
+                    contentRequestStatus: 'content/requestStatus',                   
+            }),
+            
+        },
+
+      methods: {         
           
+        ...mapActions('content', ['insertContentData', 'updateContentData']),
+
           async handleInsertContentData() {
-              // console.log("dashBoard.vue -> methods -> handleInsertContentData 36")
               const data = this.$refs.toolbar.textSave();
               const canvas = this.$refs.draw.saveImage(); 
 
@@ -45,13 +53,15 @@ import { mapActions } from 'vuex';
                 "contentId": canvas.contentId,  
               }
 
-              if(canvas.toBeUpdated) {
-                  console.log("if(data.toBeUpdated) ->  data.contentId;" + dataAll.contentId)
+              if(canvas.toBeUpdated) {                  
                   await this.updateContentData(dataAll);
               } else {
                   await this.insertContentData(dataAll);
-              }
-  
+              }               
+              if (this.contentRequestStatus == 201) {                
+                  // this.$store.dispatch('folder/getContents', userIdAndFolderIdData)
+                  this.$router.push('/show') 
+              }  
               
           },
 

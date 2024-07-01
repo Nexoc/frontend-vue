@@ -7,7 +7,7 @@ const state = {
     signInError: null,
     username: null,
     userId: null,
-    userRole: null,
+    userRole: null, // can not be change by frontend for now
     folders: {}
   };
   
@@ -17,7 +17,8 @@ const mutations = {
         state.refresh_token = userData.refresh_token
         state.signInError = null
         state.username = userData.username   
-        state.userId = userData.userId         
+        state.userId = userData.userId   
+        state.userRole = userData.userRole      
     },
     logOut (state) {
             // console.log('mutation Log Out')
@@ -25,6 +26,7 @@ const mutations = {
             state.refresh_token = null
             state.username = null
             state.userId = null
+            state.userRole = null
     },
     insertUser (state, userData) {
             // console.log('mutation insert User')
@@ -32,7 +34,7 @@ const mutations = {
             state.refresh_token = userData.refreshToken
             state.username = userData.username
             state.userId = userData.userId 
-            //state.userRole = userData.userRole          
+            state.userRole = userData.userRole          
     },
     signInError(state) {
             //console.log('mutation sign up Error') 
@@ -40,7 +42,6 @@ const mutations = {
     },
     foldersData(state, foldersData) {
             // console.log("auth.js -> mutations -> foldersData") 
-            // todo 
             state.folders = foldersData 
     }
 };
@@ -60,12 +61,12 @@ const actions = {
               })
 
               if (response.status == 200) { 
-
                 const userData = {
                   "access_token": response.data.accessToken,
                   "refresh_token": response.data.refreshToken,
                   "username": response.data.username,
                   "userId": response.data.userId,
+                  "userRole":response.data.userRole,
                 }
                 localStorage.setItem("access_token", response.data.accessToken)
                 localStorage.setItem("refresh_token", response.data.refreshToken)
@@ -111,14 +112,14 @@ const actions = {
                 localStorage.setItem("access_token", response.data.accessToken)
                 localStorage.setItem("refresh_token", response.data.refreshToken)
                 localStorage.setItem("username", response.data.username) 
-                localStorage.setItem("userId", response.data.userId)  
-                
+                localStorage.setItem("userId", response.data.userId) 
+
                 const userData = {
                     "accessToken": response.data.accessToken,
                     "refreshToken": response.data.refreshToken,
                     "username": response.data.username,
                     "userId": response.data.userId,
-                    //"userRole": response.data.userRole,
+                    "userRole": response.data.userRole,
                 }
                 commit('insertUser', userData)
             }
@@ -161,6 +162,9 @@ const getters = {
     },
     folders(state){
         return state.folders
+    },
+    userRole(state){
+        return state.userRole
     }
 };
   

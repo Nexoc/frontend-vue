@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <template v-if="authenticated">
-      <FoldersView />
+      HERE wird my CV
     </template>
       <router-view />
   </div>
@@ -10,13 +10,11 @@
 
 <script>
 // @ is an alias to /src
-import FoldersView from '@/components/FoldersView.vue'
 import { mapGetters } from "vuex";
 
 export default {
   name: 'HomeView',
-  components: {
-    FoldersView
+  components: {      
   },
   computed: {  
       ...mapGetters({

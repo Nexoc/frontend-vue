@@ -16,7 +16,6 @@ const state = {
   
 const mutations = {
         findFolderById (state, folderData) {
-            //console.log('folder.js -> mutation ->  findFolderById: ' + folderData)
             state.folderId = folderData.folderId
             state.title = folderData.title
             state.userId = folderData.userId
@@ -26,16 +25,13 @@ const mutations = {
             state.errorFolderId = null
         },
         folderStatus(state, folderID){
-            //console.log('folder.js -> mutation ->  folderStatus')
             state.folderStatus = "No folder with ID number: " + folderID
             state.errorFolderId = null
         },
         requestStatus(state, status) {
-            console.log('folder.js -> mutation ->  requestStatus done!!!')
             state.requestStatus = status
         },
         errorFolderId(state, errorStatus, folderId){
-            //console.log('folder.js -> mutation ->  error folder id')
             state.errorFolderId = "Please use digits. Folder ID: " + folderId + " Request status: " + errorStatus
             state.folderStatus = null
         },
@@ -57,10 +53,23 @@ const mutations = {
             state.folderId = folderId
         },
 
-        getContent(state, responseData){
-            // console.log("f.js ->  mutation -> responseData: " + responseData) 
-            state.contents = responseData
-        }
+        getContents(state, data){
+            state.contents = {}
+            for( let i in data.responseData) {
+                let content = {
+                    "id": data.responseData[i].contentId,
+                    "title": data.responseData[i].title,
+                    "content": data.responseData[i].content,
+                    "file": data.responseData[i].file,
+                    "path": data.responseData[i].filePath,
+                    "published": data.responseData[i].publishedOn
+                }                          
+                state.contents[i] = content     
+            }      
+            state.requestStatus = data.status 
+            state.folderId = data.folderId  
+            state.userId = data.userId          
+        },
 };
   
 const actions = {
@@ -94,15 +103,13 @@ const actions = {
             }
         },
         async updateFolder ({ commit }, data) {
-            console.log("folder.js -> action -> update folder -> folderId -> " + data.folderId)
             let http = "http://localhost:8001/api/v1/users/" + data.userId + "/folders/update/" + data.folderId
                     // http://localhost:8001/api/v1/users/             1     /folders/update/    2
             const folderDto = {
                 folderId: data.folderId,
                 title: data.title,
                 userId: data.userId
-            };    
-            // console.log("folder.js -> actions -> update -> folderDto: " + folderDto)    
+            };       
             // Create a new FormData object to send
             const formData = new FormData();
             // key is 'folderDto' value is {}
@@ -134,15 +141,12 @@ const actions = {
         },
 
         async findFolderById ({ commit }, data) {
-            console.log("folder.js -> action -> findFolderById -> folderId -> " + data.folderId)
-            // http://localhost:8001/api/v1/users/'+folder.userId+'/folders/'+folder.folderId
             let http = "http://localhost:8001/api/v1/users/" + data.userId + "/folders/" + data.folderId
             let response = await axios.get(http)
             .catch(error => {
                     console.error('Error to show all folders: ', error);
                             })  
             let responseData = response.data;
-            console.log("folder.js -> action -> findFolderById -> contents -> " + responseData.contentIds)
             if (response.status == 200) {    
                 let folderData = {
                         "folderId": responseData.folderId,
@@ -156,45 +160,31 @@ const actions = {
         },
 
         async deleteFolder ({ commit }, data) {            
-            console.log("folder.js -> action -> delete folder -> folderId -> " + data.folderId)
             let http = "http://localhost:8001/api/v1/users/" + data.userId + "/folders/delete/" + data.folderId
             let response = await axios.delete(http)
                     .catch(error => {
                         console.error('Error to delete folder: ', error);
                     }) 
-            console.log(" folder.js -> action -> delete folder -> response status -> " + response.status)
-            if (response.status >= 200 && response.status < 300) {   
-                console.log(" folder.js -> action -> delete folder -> response status -> " + response.status)     
+            if (response.status >= 200 && response.status < 300) {                      
                 commit('requestStatus', response.status)       
             }
         },
 
-        async getContents({ commit }, data) {
-            //   /{folderId}/contents
+        async getContents({ commit }, data) {            
             let http = "http://localhost:8001/api/v1/users/" + data.userId + "/folders/" + data.folderId + "/contents";
             let response = await axios.get(http)
             .catch(error => {
-                    console.error('Error to show all folders: ', error);
+                    console.error('Error to show all contents: ', error);
                             })  
-            let responseData = response.data;
-            // console.log("folder.js -> action -> getContent -> responseData length -> " + responseData.length)
-             /*
-            for(let i in responseData) {
-                console.log("in circle: 183 *************************")
-                console.log(responseData[i].title)
-                console.log(responseData[i])
-            }        
-            content "text"
-            contentId 2
-            file "27-06-2024_19-10-20image.png"
-            filePath "http://localhost:8001/file/27-06-2024_19-10-20image.png"
-            folderId 1
-            publishedOn "2024-06-27T19:10:20.899275"
-            title "title"
-            */
+            var data = {
+                "responseData" : response.data,
+                "userId": data.userId,
+                "folderId": data.folderId,
+                "userId": data.userId,
+                "status": response.status,                
+            }
             if (response.status == 200) { 
-                // console.log("folder.js -> action -> getContent -> response.status-> " + response.status)
-                commit('getContent', responseData) 
+                commit('getContents', data) 
              }
         }
 };

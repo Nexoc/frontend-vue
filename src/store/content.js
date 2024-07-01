@@ -18,24 +18,17 @@ const state = {
   
 const mutations = {
         contentStatus(state, contentId){
-            // console.log('content.js -> mutation ->  contentStatus')
             state.contentStatus = "No content with ID number: " + contentId
             state.errorContentId = null
         },
         requestStatus(state, status) {
-            // console.log('content.js -> mutation ->  requestStatus')
             state.requestStatus = status
         },
         errorContentId(state, errorStatus, contentId){
-            // console.log('folder.js -> mutation ->  error folder id')
             state.errorContentId = "Please use digits. content ID: " + contentId + " Request status: " + errorStatus
             state.contentStatus = null
         },
-        updated(state, contentData) {
-            // console.log('content.js -> mutation ->  update')
-        },
         deleteContent(state, status){
-            console.log('content.js -> mutation ->  delete')
             state.contentId = null
             state.title = null
             state.contentAsHTML = null
@@ -47,7 +40,6 @@ const mutations = {
         },
 
         insertContentData(state, contentData){
-            console.log("-> content.js mutation insert content" + contentData.file)
             state.contentId = contentData.contentId
             state.title = contentData.title
             state.contentAsHTML = contentData.content
@@ -67,7 +59,7 @@ const mutations = {
         initNew(state){
             state.contentId = null, 
             state.contentAsHTML = "content text "
-            state.title = "content title" 
+            state.title = "content title " 
             state.publishedOn = null
             state.file = null  
             state.fileUrl = null      
@@ -84,14 +76,12 @@ const mutations = {
   
 const actions = {
         async findContentById ({ commit }, contentId) {
-            console.log(" content.js -> actions -> findContentById" + contentId)
             let http = "http://localhost:8001/api/v1/contents/" + contentId
             let response = await axios.get(http)
             .catch(error => {
                 console.error('Error during geting the content with id: ' + contentId, error);
                         })
-            let responseData = response.data;
-            console.log(" content.js -> actions -> find content by id 71 -> response status: " + response.status)
+            let responseData = response.data;            
             if (response.status == 200) {    
                 let contentData = {
                         "contentId": responseData.contentId,
@@ -108,7 +98,6 @@ const actions = {
         },
 
         async updateContentData ({ commit }, data) {
-            console.log("content.js -> actions -> updateContentData -> line 87 data-> " + data)
             const base64Image = data.image; 
             const mimeType = base64Image.match(/([^;]+);/)[1];
             const imageBlob = base64ToBlob(base64Image, mimeType);
@@ -129,7 +118,6 @@ const actions = {
                         console.error('Error during inserting the new Content: ', error);
                                 })
             let responseData = response.data;
-            console.log("content.js -> updateContentData -> 108 response.status: " + response.status)
             if (response.status == 200) {    
                 let contentData = {
                         "contentId": responseData.contentId,
@@ -147,20 +135,15 @@ const actions = {
         },
 
         async deleteContent ({ commit }, contentId) {
-            console.log(" content.js -> actions -> delete content" + contentId)
             let http = "http://localhost:8001/api/v1/contents/delete/" + contentId
-
             let response = await axios.delete(http)
             .catch(error => {
                     console.error('Error during deleting the content with id: ' + contentId, error);
                             })
-            let responseData = response.data;
-            console.log(" content.js -> actions -> delete 71 -> response status: " + response.status)
             commit('deleteContent', response.status)  
         },
 
         async insertContentData ({ commit }, data) {
-            console.log("content.js -> actions -> insertContentData -> line 91 data-> " + data)
             // base64 image data
             const base64Image = data.image; 
             // Convert base64 to Blob
@@ -183,7 +166,6 @@ const actions = {
                         console.error('Error during inserting the new Content: ', error);
                                 })
             let responseData = response.data;
-            // console.log("content.js -> insertContentData -> 117 response.status: " + response.status)
             if (response.status == 201) {    
                 let contentData = {
                         "contentId": responseData.contentId,

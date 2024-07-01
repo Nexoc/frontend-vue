@@ -7,7 +7,11 @@ export default {
   props: {},
   components: { SidebarLink },
   setup() {
-      return { collapsed, toggleSidebar, sidebarWidth }
+      return { 
+        collapsed, 
+        toggleSidebar, 
+        sidebarWidth 
+      }
   },
 
   methods: {  
@@ -52,11 +56,12 @@ export default {
         </h2>
 
         <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-        <SidebarLink to="/dashboard" icon="fas fa-columns">toolbar-menu</SidebarLink>
-        <SidebarLink to="/about" icon="fas fa-chart-bar">Button</SidebarLink>
+        <SidebarLink to="/show" icon="fas fa-chart-bar">show folders</SidebarLink>
+
+        <SidebarLink to="/show-folder" icon="fas fa-columns">folder</SidebarLink>
         <SidebarLink to="/draw" icon="fas fa-users">draw</SidebarLink>
-        <SidebarLink to="/image" icon="fas fa-image">Log</SidebarLink>
-        <form @submit.prevent="logOut"><button>Logout</button></form>
+        <SidebarLink @click="logOut" to=""  icon="fas fa-image">Logout</SidebarLink>
+        
     </template>
 
     <template v-else>
@@ -69,7 +74,7 @@ export default {
         </h2>
 
         <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-        <SidebarLink to="/signin" icon="fas fa-home">Sign in</SidebarLink>
+        <SidebarLink to="/signin" icon="fas fa-user">Sign in</SidebarLink>
         <SidebarLink to="/registration" icon="fas fa-home">Registration</SidebarLink>             
     </template>
   </div>
