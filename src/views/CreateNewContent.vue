@@ -1,27 +1,27 @@
 <template>
-  
-  <table>
-  <tr>
-    <th>  <Bar ref="toolbar" />   </th>
-    <th>  <Draw ref="draw"/>  </th>
-  </tr>
 
+<div class="container">
+    <div class="header">
+        <div class="toolbar">
+            <Bar ref="toolbar" />
+        </div>
+        <div class="draw">
+            <Draw ref="draw" />
+        </div>
+    </div>
     <div id="save">
         <form @submit.prevent="handleInsertContentData">
-
-          <button id='saveButton'>Save</button>          
-
+            <button id="saveButton" class="styled-button">Save</button>
         </form>
-      </div>
+    </div>
+</div>
 
-</table>   
-  
 </template>
     
 <script>
-import Bar from '@/components/Bar/toolbar-menu/ToolBar.vue'
-import Draw from '@/components/draw/DrawCanvas.vue'
-import { mapActions, mapGetters } from 'vuex';
+  import Bar from '@/components/Bar/toolbar-menu/ToolBar.vue'
+  import Draw from '@/components/draw/DrawCanvas.vue'
+  import { mapActions, mapGetters } from 'vuex';
 
     export default {
       setup() {
@@ -61,18 +61,13 @@ import { mapActions, mapGetters } from 'vuex';
               if (this.contentRequestStatus == 201) {                
                   // this.$store.dispatch('folder/getContents', userIdAndFolderIdData)
                   this.$router.push('/show') 
-              }  
-              
+              }          
           },
-
       },
 }
 </script>
 
 <style>
-    #save{
-        margin-left: 100px;
-    }
-
-
+    @import '@/assets/css/index.css';
 </style>
+  

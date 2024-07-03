@@ -1,8 +1,6 @@
 <template>
   <div class="home">
-    <template v-if="authenticated">
-      HERE wird my CV
-    </template>
+          <CVView />
       <router-view />
   </div>
 
@@ -11,10 +9,12 @@
 <script>
 // @ is an alias to /src
 import { mapGetters } from "vuex";
+import CVView from '@/components/CV.vue'
 
 export default {
   name: 'HomeView',
-  components: {      
+  components: {   
+    CVView
   },
   computed: {  
       ...mapGetters({

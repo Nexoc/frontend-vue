@@ -1,28 +1,26 @@
 <template>
     <div class="signin">
         <form @submit.prevent="signIn">
-
-        <h2>{{ signInError }}</h2>
-
-        <div id='loginEmail'>
+            <h2 class="error-message">{{ signInError }}</h2>
+            <div class="form-group" id='loginEmail'>
             <input 
-            type="text" 
-            name="email" 
-            placeholder="Email"
-            v-model="data.email"       
+                type="text" 
+                name="email" 
+                placeholder="Email"
+                v-model="data.email"  
+                class="form-input"     
             />
         </div>
-
-        <div id='loginPass'>
+        <div  class="form-group" id='loginPass'>
             <input 
             type="password" 
             name="password"
             placeholder="Password"
-            v-model="data.password"        
+            v-model="data.password"  
+            class="form-input"      
             />
         </div>
-        <button id='login'>Sign in</button>
-
+        <button class="btn-submit" id='login'>Sign in</button>
         </form>
     </div>  
 </template>
@@ -60,8 +58,7 @@
     }
 </script>
 
+
 <style>
-    .signin{
-        margin: 50px;
-    }
+  @import '@/assets/css/index.css';
 </style>

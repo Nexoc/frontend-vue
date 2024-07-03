@@ -1,62 +1,122 @@
 <template>
-    <div class="signup">    
-        <form @submit.prevent="insertUser">  
-
-            <div id='createUser'>
-                <input type="text" name="name" placeholder="Name" v-model="data.name" />
-                <input type="email" name="email" placeholder="email" v-model="data.email" />
-                <input type="text" name="username" placeholder="Username" v-model="data.username" />
-                <input type="password" name="password" placeholder="password" v-model="data.password" />
-            </div>
-            <button id='createUser'>Registration</button>
-        </form> 
-    </div>    
-</template>
-    
-    <script>
-        import { mapGetters } from 'vuex';
-    
-        export default {   
-            /* eslint-disable */          
-            name: 'registration',
-            components: {
-                //
-            },    
-            data() {
-                return {
-                    data: {
-                        name: '',
-                        email: '',
-                        username: '',
-                        password: '',
-                    }
-                }
-            },
-    
-            computed: {
-                // get from auth.js getters:
-                ...mapGetters('auth', ['authenticated', 'username'])
-            },
-    
-            methods: {   
-                insertUser() {
-                    // To create a new User -> send to index.js actions insertUser()     
-                     this.$store.dispatch('auth/insertUser', this.data)
-                     .then(() => {
-                        if (this.authenticated) {
-                            this.$router.push('/') 
-                        }
-                    })
-    
-                    
-                },
-            },
+    <div class="signup">
+      <form @submit.prevent="insertUser">
+        <div id="createUser">
+          <div class="form-group">
+            <label>Username:</label>
+            <input type="text" placeholder="username" v-model="data.username" />
+            <span class="error" v-if="errors.username">{{ errors.username }}</span>
+          </div>
+  
+          <div class="form-group">
+            <label>Name:</label>
+            <input type="text" placeholder="Name" v-model="data.name" />
+            <span class="error" v-if="errors.name">{{ errors.name }}</span>
+          </div>
+  
+          <div class="form-group">
+            <label>Email:</label>
+            <input type="email" placeholder="email" v-model="data.email" />
+            <span class="error" v-if="errors.email">{{ errors.email }}</span>
+          </div>
+  
+          <div class="form-group">
+            <label>Password:</label>
+            <input type="password" placeholder="password" v-model="data.password" />
+            <span class="error" v-if="errors.password">{{ errors.password }}</span>
+          </div>
+        </div>
+        <button id="createUser" class="btn-submit">Registration</button>
+      </form>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    name: 'registrationView',
+    data() {
+      return {
+        data: {
+          name: '',
+          email: '',
+          username: '',
+          password: '',
+        },
+        errors: {
+          name: '',
+          email: '',
+          username: '',
+          password: '',
+        },
+      };
+    },
+    methods: {
+      validateForm() {
+        let valid = true;
+        this.errors = {
+          name: '',
+          email: '',
+          username: '',
+          password: '',
+        };
+  
+        if (!this.data.name) {
+          this.errors.name = 'Name is required.';
+          valid = false;
         }
-</script>
-    
-    
+        if (this.data.name.length < 5) {
+          this.errors.name = 'Name must be at least 5 characters.';
+          valid = false;
+        }
+        if (this.data.name.length > 50) {
+          this.errors.name = 'Name must be less then 50 characters.';
+          valid = false;
+        }
+        if (!this.data.email) {
+          this.errors.email = 'Email is required.';
+          valid = false;
+        } else if (!/\S+@\S+\.\S+/.test(this.data.email)) {
+          this.errors.email = 'Email must be valid.';
+          valid = false;
+        }
+        if (!this.data.username) {
+          this.errors.username = 'Username is required.';
+          valid = false;
+        }
+        if (this.data.username.length < 4) {
+          this.errors.username = 'Username must be at least 4 characters.';
+          valid = false;
+        }
+        if (this.data.username.length > 20) {
+          this.errors.username = 'Username must be less then 20 characters.';
+          valid = false;
+        }
+        if (!this.data.password) {
+          this.errors.password = 'Password is required.';
+          valid = false;
+        } else if (this.data.password.length < 8) {
+          this.errors.password = 'Password must be at least 8 characters.';
+          valid = false;
+        }
+        return valid;
+      },
+
+      insertUser() {
+        if (this.validateForm()) {
+          this.$store.dispatch('auth/insertUser', this.data)
+            .then(() => {
+              if (this.authenticated) {
+                this.$router.push('/');
+              }
+            });
+        }
+      },
+      
+    },
+  };
+  </script>
+  
 <style>
-    #createUser{
-        margin: 100px;
-    }
+  @import '@/assets/css/index.css';
 </style>
+  

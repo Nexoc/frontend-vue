@@ -107,7 +107,7 @@ const actions = {
                 .catch(error => {
                 console.error('Error during registration:', error);
                     })           
-
+            console.log("auth.js -> insertUser -> response: " + response.status)
             if (response.status == 200) {           
                 localStorage.setItem("access_token", response.data.accessToken)
                 localStorage.setItem("refresh_token", response.data.refreshToken)

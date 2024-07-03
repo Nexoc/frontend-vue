@@ -9,10 +9,13 @@
 
         data() {
             return {   
-                title: null,
+                title: '',
                 contentsToShow: {},
                 showUpdateField: false,
                 showContentsField: false,
+                errors: {
+                    title: ''
+                },
                 }
         },
 
@@ -32,150 +35,170 @@
         },
 
         methods: { 
-                insertFolder() {
-                    const data = {title: this.title, userId: this.userId}
-                    // send to folder.js actions insertFolderdata                    
-                    this.$store.dispatch('folder/insertFolderData', data)
-                    .then(() => {                        
-                    if (this.requestStatus == 201) {
-                        this.$store.dispatch('folder/findAllFolders', this.userId)
-                        this.$router.push('/show') 
+            validateAndInsertFolder() {
+                this.errors.title = '';
+
+                if (!this.title) {
+                    this.errors.title = 'Title is required.';
+                } else {
+                    this.insertFolder();
+                }
+                },
+            insertFolder() {
+                const data = { title: this.title, userId: this.userId };
+
+                this.$store.dispatch('folder/insertFolderData', data)
+                    .then(() => {
+                    this.$store.dispatch('folder/findAllFolders', this.userId);
+                    this.$router.push('/show');
+                    this.showUpdateField = false;
+                    this.showContentsField = false;
+                    this.title = ''; // Clear the form after successful submission
+                    })
+                    .catch(error => {
+                    if (error.response && error.response.data.errors) {
+                        this.errors = error.response.data.errors;
+                    } else {
+                        console.error('An error occurred:', error);
+                    }
+                    });
+            },
+
+
+            updateFolder(folderId) {
+                var data = {
+                    "folderId": folderId,
+                    "title": this.title,
+                    "userId": this.userId
+                }  
+                this.$store.dispatch('folder/updateFolder', data)                    
+                .then(() => {     
+                    console.log("status " + this.requestStatus)                  
+                    if (this.requestStatus == 200) {
                         this.showUpdateField = false
                         this.showContentsField = false
-                        }
-                    })
-                },    
-                updateFolder(folderId) {
-                    var data = {
-                        "folderId": folderId,
-                        "title": this.title,
-                        "userId": this.userId
-                    }  
-                    this.$store.dispatch('folder/updateFolder', data)                    
-                    .then(() => {     
-                        console.log("status " + this.requestStatus)                  
-                        if (this.requestStatus == 200) {
-                            this.showUpdateField = false
-                            this.showContentsField = false
-                            this.$store.dispatch('folder/findAllFolders', this.userId)
-                            this.$router.push('/show')                             
-                        }
-                    })
-                },                 
-                updateVariable(folderIdToBeUpdated){
-                    this.$store.dispatch('folder/updateFolderId', folderIdToBeUpdated) 
-                    this.showUpdateField = true
-                    this.showContentsField = false
-                },
-
-                createContent(folderId) {  
-                    var data = {
-                        "folderId": folderId,
-                        "userId": this.userId
+                        this.$store.dispatch('folder/findAllFolders', this.userId)
+                        this.$router.push('/show')                             
                     }
-                    this.$store.dispatch('folder/findFolderById', data)                    
-                    .then(() => {  
-                        this.showContentsField = false                     
-                        if (this.requestStatus == 200) {
-                            this.showUpdateField = false  
-                            this.$store.dispatch('content/toBeUpdated', false)                             
-                            
-                            this.$router.push('/create') 
-                        }
-                    })
-                }, 
+                })
+            },                 
+            updateVariable(folderIdToBeUpdated){
+                this.$store.dispatch('folder/updateFolderId', folderIdToBeUpdated) 
+                this.showUpdateField = true
+                this.showContentsField = false
+            },
 
-                getAllFoldersByUser() {
-                    // send to folder.js actions findFolderById                  
-                    this.$store.dispatch('folder/findAllFolders', this.userId)
-                    .then(() => {  
-                        this.showContentsField = false                      
-                        if (this.requestStatus == 200) {
-                            this.showUpdateField = false
-                            this.$router.push('/show') 
-                        }
-                    })
-                
-                },   
-                deleteFolder(folderId) {                    
-                    var data = {
-                        "folderId": folderId,
-                        "userId": this.userId
+            createContent(folderId) {  
+                var data = {
+                    "folderId": folderId,
+                    "userId": this.userId
+                }
+                this.$store.dispatch('folder/findFolderById', data)                    
+                .then(() => {  
+                    this.showContentsField = false                     
+                    if (this.requestStatus == 200) {
+                        this.showUpdateField = false  
+                        this.$store.dispatch('content/toBeUpdated', false)                             
+                        
+                        this.$router.push('/create') 
                     }
-                    this.$store.dispatch('folder/deleteFolder', data)                    
-                    .then(() => {     
-                        console.log("folderVuew .> methods delete -> response status -> " + this.requestStatus)    
-                        if (this.requestStatus == 200) {
-                            this.$store.dispatch('folder/findAllFolders', this.userId)
-                            this.showUpdateField = false
-                            this.showContentsField = false
-                            this.$router.push('/show') 
-                        }
-                    })  
-                },  
-                showContents(folderId) {
-                    var data = {
-                        "folderId": folderId,
-                        "userId": this.userId
+                })
+            }, 
+
+            getAllFoldersByUser() {
+                // send to folder.js actions findFolderById                  
+                this.$store.dispatch('folder/findAllFolders', this.userId)
+                .then(() => {  
+                    this.showContentsField = false                      
+                    if (this.requestStatus == 200) {
+                        this.showUpdateField = false
+                        this.$router.push('/show') 
                     }
-                    this.$store.dispatch('folder/getContents', data)  
-                    .then(() => {   
-                        if (this.requestStatus == 200) {
-                            this.showUpdateField = false
-                            this.showContentsField = true
-                            this.$router.push('/show') 
-                            }
-                    })  
-                },    
-
-                showContentsInNewWindow(folderId) {
-                    var data = {
-                        "folderId": folderId,
-                        "userId": this.userId
+                })
+            
+            },   
+            deleteFolder(folderId) {                    
+                var data = {
+                    "folderId": folderId,
+                    "userId": this.userId
+                }
+                this.$store.dispatch('folder/deleteFolder', data)                    
+                .then(() => {     
+                    console.log("folderVuew .> methods delete -> response status -> " + this.requestStatus)    
+                    if (this.requestStatus == 200) {
+                        this.$store.dispatch('folder/findAllFolders', this.userId)
+                        this.showUpdateField = false
+                        this.showContentsField = false
+                        this.$router.push('/show') 
                     }
-                    this.$store.dispatch('folder/getContents', data)  
-                    .then(() => {   
-                        console.log("requestStatus: " + this.requestStatus)
-                        if (this.requestStatus == 200) { 
-                            this.$router.push('/show-folder') 
+                })  
+            },  
+            showContents(folderId) {
+                var data = {
+                    "folderId": folderId,
+                    "userId": this.userId
+                }
+                this.$store.dispatch('folder/getContents', data)  
+                .then(() => {   
+                    if (this.requestStatus == 200) {
+                        this.showUpdateField = false
+                        this.showContentsField = true
+                        this.$router.push('/show') 
                         }
-                    })
-   
-                },   
+                })  
+            },    
 
-                deleteContent(contentId){
-                    this.$store.dispatch('content/deleteContent', contentId)  
-                    .then(() => {   
-                        if (this.requestStatus <= 200) {
-                            this.$store.dispatch('folder/findAllFolders', this.userId)
-                            this.showUpdateField = false
-                            this.showContents(this.folderId)
-                            this.$router.push('/show') 
-                        }
-                    })
-                },  
+            showContentsInNewWindow(folderId) {
+                var data = {
+                    "folderId": folderId,
+                    "userId": this.userId
+                }
+                this.$store.dispatch('folder/getContents', data)  
+                .then(() => {   
+                    console.log("requestStatus: " + this.requestStatus)
+                    if (this.requestStatus == 200) { 
+                        this.$router.push('/show-folder') 
+                    }
+                })
 
-                showContent(contentId) {
-                    this.$store.dispatch('content/findContentById', contentId)  
-                    this.$router.push('/content') 
-                },
-        },
-    }      
+            },   
+
+            deleteContent(contentId){
+                this.$store.dispatch('content/deleteContent', contentId)  
+                .then(() => {   
+                    if (this.requestStatus <= 200) {
+                        this.$store.dispatch('folder/findAllFolders', this.userId)
+                        this.showUpdateField = false
+                        this.showContents(this.folderId)
+                        this.$router.push('/show') 
+                    }
+                })
+            },  
+
+            showContent(contentId) {
+                this.$store.dispatch('content/findContentById', contentId)  
+                this.$router.push('/content') 
+            },
+    },
+}      
 </script>
 
 <template>
     <div class="body">
         <div id="app" class="main">    
             <div id='insertFolder'>
-                <form @submit.prevent="insertFolder">
-                    <input 
+                <form @submit.prevent="validateAndInsertFolder">
+                    <div class="form-group">
+                        <input 
                         type="text" 
                         name="title" 
-                        placeholder="your title of new folder" 
+                        placeholder="Your title of new folder" 
                         v-model="title" 
                         class="input-field" 
                         />
-                    <button class="styled-button">insert new folder</button>
+                        <span class="error" v-if="errors.title">{{ errors.title }}</span>
+                    </div>
+                    <button class="styled-button">Insert New Folder</button>
                 </form>
             </div>
         
@@ -197,20 +220,20 @@
                             <th>Show contents in new window</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-in-table">
                         <tr v-for="folder in folders" :key="folder.id">
                             <td>
-                                {{ folder.title }} and id {{ folder.folderId }}
+                                {{ folder.title }}
                             </td>
                             <td>
                                 <form @submit.prevent="createContent(folder.folderId)">
-                                    <button  class="styled-button" >create new content in this folder</button>
+                                    <button  class="styled-button" >new content</button>
                                 </form>
                             </td>
                             <td>
                             <template v-if=!showUpdateField>  
                                     <form @submit.prevent="updateVariable(folder.folderId)">
-                                        <button  class="styled-button" >Update folder title</button>
+                                        <button  class="styled-button" >update title</button>
                                     </form>
                             </template>
                             <template v-if=showUpdateField>   
@@ -223,14 +246,14 @@
                                             v-model="title"
                                             class="input-field"
                                         />
-                                        <button class="styled-button">Update folder title</button>
+                                        <button class="styled-button">update title</button>
                                     </form>  
                                 </template>                                                     
                             </template>
                             </td>
                             <td>
                                 <form @submit.prevent="deleteFolder(folder.folderId)">
-                                    <button class="styled-button">Delete folder</button>
+                                    <button class="styled-button">delete folder</button>
                                 </form>
                             </td>
                             <td>
@@ -240,7 +263,7 @@
                             </td>
                             <td>
                                 <form @submit.prevent="showContentsInNewWindow(folder.folderId)">
-                                    <button class="styled-button">show contents in new window</button>
+                                    <button class="styled-button">contents in new window</button>
                                 </form>
                             </td>
                         </tr>
@@ -265,86 +288,5 @@
                 </div>    
              </template>             
         </div>
-      </div>
-      </template>
-
-
-
-<style scoped>
-.body {
-  font-family: Arial, sans-serif;
-}
-
-.main {
-  padding: 20px;
-}
-
-#insertFolder,
-#showFoldersButton {
-  margin-bottom: 20px;
-}
-
-.input-field {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  margin-right: 10px;
-  width: 300px;
-}
-
-.styled-button {
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 8px;
-  transition-duration: 0.4s;
-}
-
-.styled-button:hover {
-  background-color: white;
-  color: black;
-  border: 2px solid #4caf50;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-.table th,
-.table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-.table th {
-  background-color: #4caf50;
-  color: white;
-  text-align: left;
-}
-
-.content-item {
-  margin-bottom: 20px;
-}
-
-.content-actions {
-  display: flex;
-  gap: 10px;
-}
-
-img {
-  border-radius: 5px;
-  margin-right: 10px;
-}
-</style>
-
-  
-  
+    </div>
+</template>

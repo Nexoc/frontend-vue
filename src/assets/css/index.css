@@ -1,0 +1,313 @@
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding: 0;
+}
+  
+/* Signup form */
+.signup,
+.signin,
+.content-title,
+#insertFolder  {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.signup form,
+.signin form {
+    width: 100%;
+}
+  
+.signup #createUser {
+    margin-bottom: 20px;
+}
+  
+.signup .form-group,
+.signin .form-group {
+    margin-bottom: 15px;
+}
+  
+.signup label,
+.signin label {
+    font-weight: bold;
+}
+
+.input-field,
+.signup input[type="text"],
+.signup input[type="email"],
+.signup input[type="password"],
+.signin input[type="text"],
+.signin input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.error,
+.signup .error,
+.signin .error-message {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 5px;
+}
+  
+/* Button Styles */
+.styled-button,
+.signup .btn-submit,
+.signin .btn-submit {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #7d7d7d; /* Default background color (Grey) */
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.styled-button:hover,
+.signup .btn-submit:hover,
+.signin .btn-submit:hover {
+    background-color: #4d4d4d; /* Darker shade of grey on hover */
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table th {
+    background-color: #7d7d7d; /* Grey */
+    color: white;
+    text-align: left;
+}
+
+/* Sidebar Styles */
+:root {
+    --sidebar-bg-color: #f0f0f0;
+    --sidebar-item-hover: #4d4d4d; /* Darker grey */
+    --sidebar-item-active: #a2a8a5;
+  }
+
+
+.sidebar {
+    color: rgb(0, 0, 0);  
+    float: left;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 0.5em;
+  
+    transition: 0.3s ease;
+  
+    display: flex;
+    flex-direction: column;
+}
+  
+.sidebar h1 {
+    height: 2.5em;
+}
+  
+.collapse-icon {
+    position: absolute;
+    top: 0;
+    padding: 0.75em;
+    color: rgba(0, 0, 0, 0.7);
+    transition: 0.2s linear;
+}
+  
+.rotate-180 {
+    transform: rotate(180deg);
+    transition: 0.2s linear;
+}
+
+.content-item {
+    margin-bottom: 20px;
+}
+  
+.content-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+/* Sidebar Button toggle Styles */
+#showFoldersButton,
+#sidebarDiv{    
+    width: 15%;   
+    margin-bottom: 20px;
+}
+
+.text-in-table {
+    color: rgba(0, 0, 0, 0.7);
+    background: #ffffff;
+    font-size: 20px; 
+    padding: 8px; 
+    border-radius: 4px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+  
+/* CSS for Show Folder Title */
+.show-folder-title {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    margin-bottom: 10px;
+}
+  
+.show-folder-title p {
+    margin-bottom: 5px;
+}
+  
+/* CSS for HTML Content */
+.show-folder-title {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    margin-bottom: 10px;
+}
+  
+.show-folder-title p {
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333; 
+}
+  
+/* CSS for HTML Content */
+.v-html {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    overflow: auto; /* Enable scrollbars if content overflows */
+}
+  
+.v-html p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+  
+.v-html img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+  
+.v-html blockquote {
+    background-color: #f9f9f9;
+    border-left: 4px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+}
+  
+.v-html pre {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto; /* Enable horizontal scroll for code blocks */
+}
+  
+.v-html a {
+    color: #5a5a5a; 
+    text-decoration: underline;
+}
+  
+.v-html a:hover {
+    color: #333; 
+}
+.toolbar,
+.draw {
+    flex: 1;
+}
+
+/* Styles for the save button and form */
+#save {
+    margin-top: 20px;
+}
+
+#saveButton {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #7d7d7d; 
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Space between header and save button */
+    margin: 50px auto;
+}
+
+.header {
+    display: flex;
+    gap: 20px; /* Space between toolbar and draw */
+    justify-content: center;
+}
+
+.main-container {
+    display: flex;
+    align-items: flex-start; 
+    justify-content: space-between; 
+    margin: 10px;
+}
+
+
+.content-cv {
+    flex: 1; 
+    margin-right: 20px;
+}
+
+.photo-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+
+.photo {
+    border-radius: 5px;
+}
+
+header#cv, section#cv {
+    margin-left: 40px;
+    padding: 0 20px 0 0; /* Add some padding to the right for better spacing */
+}
+
+header#cv h1, header#cv p, section#cv h2, section#cv p {
+    margin: 0;
+    padding-bottom: 10px; /* Optional: Add some space between paragraphs */
+}
+
+
