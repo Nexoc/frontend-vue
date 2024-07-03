@@ -3,7 +3,7 @@
       <div class="show-folder-title"> 
           <h2>{{ title }}</h2>
           <h3>{{ username }}</h3>                        
-          <p>published on: {{ publishedOn.slice(0, 10) }}</p>
+          <p>published on: {{ publishedOn }}</p>
       </div>            
       <div>
         <img :src="fileUrl" :alt="title" width="600" height="400">

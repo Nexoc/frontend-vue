@@ -3,11 +3,10 @@
           <CVView />
       <router-view />
   </div>
-
 </template>
 
 <script>
-// @ is an alias to /src
+// https://fontawesome.com/v4/icons/
 import { mapGetters } from "vuex";
 import CVView from '@/components/CV.vue'
 

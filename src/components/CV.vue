@@ -1,103 +1,92 @@
 <template>
-<body> 
+    <body>
     <div class="main-container">
         <div class="content-cv">
             <header id="cv">
-                <h1>Marat Davletshin</h1>
-                <p>Software Developer</p>
+                <h1>Marat Davletshin</h1>                
+                <p><i class="fa fa-mars" aria-hidden="true"></i> Software Developer</p>
+                <p><i class="fa fa-phone" aria-hidden="true"></i> +43 677 617 82 017</p>
+                <p><i class="fa fa-address-card"></i> Wien Österreich</p>
+                <p><i class="fa fa-envelope" aria-hidden="true"></i> davletshin081180@gmail.com</p>
+                <p><a href=" github.com/nexoc"> www.github</a></p>                
             </header>
             <section class="section" id="cv">
                 <h2>Über mich:</h2>
                 <p>
                     Ich habe einen Hintergrund in Informationstechnologie mit Schwerpunkt auf Backend-Entwicklung.
-                    Ich bin der Typ Mensch, der jede Gelegenheit nutzt, etwas Neues zu lernen. Deshalb liebe ich Herausforderungen.
-                    Dadurch gerate ich unter Druck, schnell zu lernen und viele neue Erfahrungen zu sammeln.
+                    Ich bin der Typ Mensch, der jede Gelegenheit nutzt, etwas Neues zu lernen.
                 </p>
             </section>
         </div>
 
         <div class="photo-container">
-            <img class="photo"  alt="photo" src="../assets/photo.jpg" width="270" height="330">
+            <img class="photo"  alt="photo" src="../assets/photo.jpg" width="350" height="420">
         </div>
 
     </div>
 
     <section class="section">
-        <h2>Tech skills:</h2>
-        <ul>
-            <li>
-                Frontend
-                <ul> 
-                    <li>
-                        HTML
-                    </li>
-                    <li>
-                        CSS
-                    </li>
-                    <li>
-                        JS (VueJS)
-                    </li>
-                </ul>
+        <h2 id="tech-skills-title">Tech skills:</h2>
+<table id="tech-skills-table">
+    <tr>
+        <th id="category-header">Category</th>
+        <th id="skills-header">Skills</th>
+    </tr>
+    <tr>
+        <td id="frontend-category">Frontend</td>
+        <td id="frontend-skills">
+            <ul id="frontend-skills-list">
+                <li id="frontend-html">HTML</li>
+                <li id="frontend-css">CSS</li>
+                <li id="frontend-js">JS (VueJS)</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td id="backend-category">Backend</td>
+        <td id="backend-skills">
+            <ul id="backend-skills-list">
+                <li id="backend-java">Java
+                    <ul id="java-skills-list">
+                        <li id="spring-core">Spring Core, Maven, Lombok, JDBC API, JDBC Template</li>
+                        <li id="spring-mvc">Spring MVC, Spring Data JPA, Hibernate, Spring Boot</li>
+                        <li id="rest-api">REST API using Spring Boot</li>
+                        <li id="spring-security">Spring Security with JWT, CORS, CSRF</li>
+                    </ul>
+                </li>
+                <li id="backend-python">Python: Django</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td id="sql-category">SQL</td>
+        <td id="sql-skills">
+            <ul id="sql-skills-list">
+                <li id="sql-databases">PostgreSQL, SQLite, H2</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td id="devops-category">DevOps</td>
+        <td id="devops-skills">
+            <ul id="devops-skills-list">
+                <li id="linux-admin">Linux System Administrator on Debian, Ubuntu</li>
+                <li id="docker">Docker, Docker Compose</li>
+                <li id="nginx">Nginx</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td id="other-category">Others</td>
+        <td id="other-skills">
+            <ul id="other-skills-list">
+                <li id="git">Git</li>
+                <li id="ms-office">MS-Office</li>
+            </ul>
+        </td>
+    </tr>
+</table>
 
-            </li>
-
-            <li>Backend
-                <ul>
-                    <li>
-                        Java
-                        <ul> 
-                            <li>
-                                Spring Core, Maven, Lombok,  JDBC API, JDBC Template 
-                            </li>
-                            <li>
-                                Spring MVC, Spring Data JPA, Hibernate, Spring Boot
-                            </li>
-                            <li>
-                                REST API using Spring Boot
-                            </li>
-                            <li>
-                                Spring Security with JWT, CORS, CSRF
-                            </li>
-                        </ul>
-                    </li>
-                    <li>Python: Django</li>
-                    
-                </ul>
-            </li>
-            <li>
-                SQL
-                <ul>
-                    <li>
-                    PostgreSQL, Sqlite, H2
-                    </li>
-                </ul>
-            </li>            
-            <li>
-                Devops
-                <ul> 
-                    <li>
-                        Linux System Administrator on Debian, Ubuntu
-                    </li>
-                    <li>
-                        Docker, Docker Compose
-                    </li>
-                    <li>
-                        Ngnix
-                    </li>
-                </ul>
-                    </li>
-                
-            <li>Sonstige
-                <ul> 
-                    <li>
-                        Git
-                    </li>
-                    <li>
-                        MS-Office
-                    </li>
-                </ul>
-            </li>
-        </ul>
     </section>
 
     <section class="section">
@@ -129,8 +118,7 @@
             <li>2000-2004: Balletttänzer Moskau, Russland, Das Staatliche Akademische Theater des klassischen Balletts</li>
         </ul>
     </section>
-</body>
-
+    </body>
 </template>
 
 <style scoped>
@@ -152,9 +140,6 @@ body {
     margin-left: 10px;
 }
 
-
-
-
 h1, h2 {
     color: #333;
 }
@@ -173,4 +158,58 @@ h2 {
     margin-bottom: 10px;
     padding-left: 20px;
 }
+
+#tech-skills-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#tech-skills-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+#tech-skills-table th, #tech-skills-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top; 
+}
+
+#category-header {
+    background-color: #7d7d7d; 
+    color: white;
+}
+
+#skills-header {
+    background-color: #7d7d7d; 
+    color: white;
+}
+
+#tech-skills-table ul {
+    list-style-type: disc;
+    margin: 0;
+    padding-left: 20px;
+}
+
+#tech-skills-table ul ul {
+    list-style-type: circle;
+    margin: 0;
+    padding-left: 20px;
+}
+
+#tech-skills-table ul ul ul {
+    list-style-type: square;
+    margin: 0;
+    padding-left: 20px;
+}
+
+#frontend-html, #frontend-css, #frontend-js,
+#spring-core, #spring-mvc, #rest-api, #spring-security,
+#sql-databases, #linux-admin, #docker, #nginx, 
+#git, #ms-office {
+    list-style-type: none;
+}
+
 </style>

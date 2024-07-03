@@ -13,7 +13,7 @@
             <div class="table">  
                     <div class="show-folder-title"> 
                         <h2>{{ content.title }} </h2>
-                        published on: {{ content.published.slice(0,10) }} <br>
+                        published on: {{ content.published }} <br>
                     </div>
                     <div class="v-html" v-html="content.content"></div>
                     <img :src="content.path" :alt="content.title" width="600" height="400">

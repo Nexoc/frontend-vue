@@ -50,17 +50,15 @@ export default {
         <h2>
           <span v-if="collapsed">
             <div>{{ username.charAt(0).toUpperCase() }}</div>
-            <div>{{ username.charAt(1).toUpperCase() }}</div>          
+            <div>{{ username.charAt(1).toUpperCase() }}</div>       
+            <div>{{ username.charAt(2).toUpperCase() }}</div>      
           </span>
           <span v-else>{{ username }}</span>
         </h2>
 
         <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
         <SidebarLink to="/show" icon="fas fa-chart-bar">show folders</SidebarLink>
-
-        <SidebarLink to="/show-folder" icon="fas fa-columns">folder</SidebarLink>
-        <SidebarLink to="/draw" icon="fas fa-users">draw</SidebarLink>
-        <SidebarLink @click="logOut" to=""  icon="fas fa-image">Logout</SidebarLink>
+        <SidebarLink @click="logOut" to=""  icon="fa fa-sign-out">Logout</SidebarLink>
         
     </template>
 
@@ -74,8 +72,8 @@ export default {
         </h2>
 
         <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
-        <SidebarLink to="/signin" icon="fas fa-user">Sign in</SidebarLink>
-        <SidebarLink to="/registration" icon="fas fa-home">Registration</SidebarLink>             
+        <SidebarLink to="/signin" icon="fa fa-sign-in">Sign in</SidebarLink>
+        <SidebarLink to="/registration" icon="fas fa-users">Registration</SidebarLink>             
     </template>
   </div>
 </template>
